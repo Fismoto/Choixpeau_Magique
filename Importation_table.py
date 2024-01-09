@@ -17,3 +17,4 @@ for poudlard_character in characteristics_tab:
         if poudlard_character['Name'] == kaggle_character['Name']:
             poudlard_character.update(kaggle_character)
             poudlard_characters.append(poudlard_character)
+            
