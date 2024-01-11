@@ -3,7 +3,7 @@
 '''
 Codé par : Octave FORTUN, Milo MONTAGNE, Pierrick LEFEVRE
 
-Projet NSI 3 kPPV, partie I "Harry se fait (enfin) la malle"
+Projet NSI 3 "Choixpeau Magique", partie I
 
 Le programme utilise l'algorithme des k plus proches voisins pour attribuer 
 une maison à un personnage en fonction de 4 caractéristiques 

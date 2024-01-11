@@ -1,0 +1,14 @@
+# coding: utf_8
+
+Codé par : Octave FORTUN, Milo MONTAGNE, Pierrick LEFEVRE
+
+Pseudo-code du Projet NSI 3 "Choixpeau Magique", partie I
+
+Le programme utilise l'algorithme des k plus proches voisins pour attribuer 
+une maison à un personnage en fonction de 4 caractéristiques 
+(le courage, l'ambition, l'intelligence, la tendance au bien)
+à l'aide d'une base de données de personnages d'Harry Potter
+
+Licence : CC-BY-NC-SA
+
+github : https://github.com/Fismoto/Choixpeau_Magique
