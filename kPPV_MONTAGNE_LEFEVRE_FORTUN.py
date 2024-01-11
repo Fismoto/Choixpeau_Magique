@@ -12,7 +12,7 @@ une maison à un personnage en fonction de 4 caractéristiques
 
 Licence : CC-BY-NC-SA
 
-github : https://github.com/Nodd20/Projet_malle_Gr2
+github : https://github.com/Fismoto/Choixpeau_Magique
 '''
 
 # Importation des modules :
