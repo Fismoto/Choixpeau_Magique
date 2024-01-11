@@ -5,9 +5,10 @@ Codé par : Octave FORTUN, Milo MONTAGNE, Pierrick LEFEVRE
 
 Projet NSI 3 kPPV, partie I "Harry se fait (enfin) la malle"
 
-Le programme défini une fonction qui remplit une malle de trois manières,
-sans méthode particulière, la malle la plus lourde possible, 
-ou avec le plus de mana possible.
+Le programme utilise l'algorithme des k plus proches voisins pour attribuer 
+une maison à un personnage en fonction de 4 caractéristiques 
+(le courage, l'ambition, l'intelligence, la tendance au bien)
+à l'aide d'une base de données de personnages d'Harry Potter
 
 Licence : CC-BY-NC-SA
 
