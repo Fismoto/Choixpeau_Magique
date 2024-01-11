@@ -20,26 +20,27 @@ import csv
 
 
 # Définition des fonctions :
-def distance(table, character):
+def distance(characters_data_base, new_character):
     '''
     Cette fonction renvoie la table avec la clef 'Distance'
     ajoutée à chaque dictionnaire.
-    La valeur de cette clef est la distance entre le character (personnage type)
-    et le personnage symbolisé par le dictionnaire.
+    La valeur de cette clef est la distance entre le new_character
+    et le personnage de la base de données symbolisé par le dictionnaire.
+    Cela nous servira pour l'algorithme des kPPV.
     '''
-    table_with_distance = table
+    data_base_with_distance = new_character
     # Cette partie ajoutera la clef 'Distance' à chaque dictionnaire de table_with_distance
-    return table_with_distance
+    return data_base_with_distance
     
     
-# Importation des informations (seule la maison nous intéresse) des personnages dans une table :
+# Importation des informations sur les personnages dans une table :
 with open("Characters.csv", mode='r', encoding='utf-8') as f:
     reader = csv.DictReader(f, delimiter=';')
     characters_tab = [{key : value.replace('\xa0', ' ') for key, \
                        value in element.items()} for element in reader]
 
 
-# Importation des caractéristiques (le courage, l'ambition, l'intelligence, la tendance au bien) des personnages dans une table :
+# Importation des caractéristiques des personnages dans une table :
 with open("Caracteristiques_des_persos.csv", mode='r', encoding='utf-8') as f:
     reader = csv.DictReader(f, delimiter=';')
     characteristics_tab = [{key : value for key, value in element.items()} \

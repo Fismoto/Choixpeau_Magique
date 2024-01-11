@@ -12,3 +12,10 @@ une maison à un personnage en fonction de 4 caractéristiques
 Licence : CC-BY-NC-SA
 
 github : https://github.com/Fismoto/Choixpeau_Magique
+
+DEBUT
+	DEFINIR FONCTION distance(base_de_donnees_des_personnages, nouveau_personnage)
+		
+		
+	FIN DEFINIR FONCTION
+		
