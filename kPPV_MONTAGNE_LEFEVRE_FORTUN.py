@@ -47,8 +47,37 @@ def distance(characters_data_base, new_character):
         chaque dictionnaire la clef 'Distance' qui correspond à
         la distance euclidienne entre ce personnage et
         le personnage cible new_character
+        
+        
+        
+        Variables :
+    			- base_de_donnees_avec_distance : tableau de dictionnaires
+    			- n : entier, longueur de base_de_donnees_des_personnages
+    			- distance : flottant, distance entre chaque personnage 
+    			et le personnage cible
+    		
+    		DEBUT
+    			base_de_donnees_avec_distance = COPIE de base_de_donnees_des_personnages
+    			n = longueur(base_de_donnees_des_personnages)
 
+    			POUR i ALLANT DE 0 A n - 1 
+    				distance = RACINE_CARRE((nouveau_personnage['Courage'] + base_de_donnees_des_personnages[i]['Courage'])**2
+    						     	+ (nouveau_personnage['Ambition'] + base_de_donnees_des_personnages[i]['Ambition'])**2
+    							+ (nouveau_personnage['Intelligence'] + base_de_donnees_des_personnages[i]['Intelligence'])**2
+    							+ (nouveau_personnage['Tendance au bien'] + base_de_donnees_des_personnages[i]['Tendance au bien'])**2)
+    				 base_de_donnees_avec_distance[i]['Distance'] = distance
+    			FIN POUR
+        
     '''
+    data_base_with_distance = characters_data_base
+    n = len(characters_data_base)
+    
+    for i in range(0, n - 1):
+        distance = sqrt((new_character['Courage'] + characters_data_base[i]['Courage']**2) 
+                        + (new_character['Ambition'] + characters_data_base[i]['Ambition']**2)
+                        + (new_character['Intelligence'] + characters_data_base[i]['Intelligence']**2)
+                        + (new_character['Good'] + characters_data_base[i]['Good']**2))
+        data_base_with_distance[i]['Distance'] = distance
     # Préconditions :
     assert type(characters_data_base) == list, \
            "La base de donnée être une liste de dictionnaires."
@@ -90,5 +119,3 @@ où chaque dictionnaire  correspond à un personnage,
 avec comme clefs toutes les informations que l'on a sur ce personnage
 (dont la maison, le courage, l'ambition, l'intelligence, la tendance au bien)
 '''
-
-
