@@ -19,7 +19,9 @@ github : https://github.com/Fismoto/Choixpeau_Magique
 import csv
 from math import sqrt
 
-
+# Constantes :
+CARACTERISTICS = ('Courage', 'Ambition', 'Intelligence', 'Good')
+    
 # Définition des fonctions :
 def distance(characters_data_base, new_character):
     '''
@@ -104,10 +106,8 @@ def euclidian_distance(character1: dict, character2: dict) -> float:
     Sorties :
         - distance euclidienne entre ces deux personnages
     '''
-    
-    caracteristics = ('Courage', 'Ambition', 'Intelligence', 'Good')
-    list_of_distances = [(character1[caracteristic] - character2[caracteristic])**2 for caracteristic in caracteristics]
-    return math.sqrt(sum(list_of_distances))
+    list_of_distances = [(character1[caracteristic] - character2[caracteristic])**2 for caracteristic in CARACTERISTICS]
+    return sqrt(sum(list_of_distances))
 
 # Importation de la table "Characters.csv" :
 with open("Characters.csv", mode='r', encoding='utf-8') as f:
@@ -130,6 +130,11 @@ for poudlard_character in characteristics_tab:
     for kaggle_character in characters_tab:
         if poudlard_character['Name'] == kaggle_character['Name']:
             poudlard_character.update(kaggle_character)
+            
+            # On transforme les caractéristiques en entiers
+            for caracteristic in CARACTERISTICS:
+                poudlard_character[caracteristic] = int(poudlard_character[caracteristic])
+                
             poudlard_characters.append(poudlard_character)
 '''
 La table poudlard_characters est maintenant une liste de dictionnaires
@@ -138,5 +143,6 @@ avec comme clefs toutes les informations que l'on a sur ce personnage
 (dont la maison, le courage, l'ambition, l'intelligence, la tendance au bien)
 '''
 
+print(poudlard_characters[0], poudlard_characters[1])
 
-print(euclidian_distance(poudlard_characters[0], poudlard_characters[0]))
+print(euclidian_distance(poudlard_characters[0], poudlard_characters[1]))
