@@ -89,8 +89,26 @@ def distance(characters_data_base, new_character):
     data_base_with_distance = characters_data_base.copy()
     # Cette partie ajoutera la clef 'Distance' à chaque dictionnaire de table_with_distance
     return data_base_with_distance
+
+def euclidian_distance(character1: dict, character2: dict) -> float:
+    '''
+    Cette fonction calcule la distance entre deux personnages, en utilisant 
+    la formule de la distance euclidienne.
+    Cela nous servira pour l'algorithme des kPPV.
     
+    Entrées :
+        - character1 et character2 : dictionnaires qui correspondent chacun 
+        à un personnage avec comme clefs au minimum 'Courage', 'Ambition', 
+        'Intelligence' et 'Good'
     
+    Sorties :
+        - distance euclidienne entre ces deux personnages
+    '''
+    
+    caracteristics = ('Courage', 'Ambition', 'Intelligence', 'Good')
+    list_of_distances = [(character1[caracteristic] - character2[caracteristic])**2 for caracteristic in caracteristics]
+    return math.sqrt(sum(list_of_distances))
+
 # Importation de la table "Characters.csv" :
 with open("Characters.csv", mode='r', encoding='utf-8') as f:
     reader = csv.DictReader(f, delimiter=';')
@@ -119,3 +137,6 @@ où chaque dictionnaire  correspond à un personnage,
 avec comme clefs toutes les informations que l'on a sur ce personnage
 (dont la maison, le courage, l'ambition, l'intelligence, la tendance au bien)
 '''
+
+
+print(euclidian_distance(poudlard_characters[0], poudlard_characters[0]))
