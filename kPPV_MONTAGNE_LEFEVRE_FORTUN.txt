@@ -14,6 +14,7 @@ Licence : CC-BY-NC-SA
 github : https://github.com/Fismoto/Choixpeau_Magique
 
 DEBUT
+	# Constantes :
 	CARACTERISTIQUES = ('Courage', 'Ambition', 'Intelligence', 'Good')
 
 	DEFINIR FONCTION distance_euclidienne(personnage1, personnage2, caracteristiques=CARACTERISTIQUES)
@@ -23,12 +24,12 @@ DEBUT
     		Cela nous servira pour l'algorithme des kPPV.
     
     		Entrées :
-        	- personnage1 et personnage2 : dictionnaires qui correspondent chacun 
-        	à un personnage avec comme clefs au minimum 'Courage', 'Ambition', 
-        	'Intelligence' et 'Good'
-        	- caracteristiques : tuple des caracteristiques qui nous
+		 - caracteristiques : tuple des caracteristiques qui nous
         	permettent de calculer la distance ; 
         	valeur par défaut : la constante CARACTERISTIQUES
+        	- personnage1 et personnage2 : dictionnaires qui correspondent 
+		chacun à un personnage avec comme clefs au minimum 
+		tous les éléments de caracteristiques 
     
     		Sorties :
         	- flottant, distance euclidienne entre ces deux personnages
@@ -43,25 +44,36 @@ DEBUT
 
 
 	DEFINIR FONCTION kPPV_maison(base_de_donnee_des_persos, nouveau_perso, caracteristiques=CARACTERISTIQUES, k=3)
+
 		Cette fonction renvoie la maison du nouveau personnage, 
     		définie avec l'algorithme des kPPV.
     
-    		Entrées :
-        	- characters_data_base : table (tableau de dictionnaires) 
+    		Entrées :				
+		- caracteristiques : tuple des caracteristiques qui nous
+        	permettent de calculer la distance ; 
+        	valeur par défaut : la constante CARACTERISTIQUES
+
+        	- base_de_donnee_des_persos : table (tableau de dictionnaires) 
         	où chaque dictionnaire  correspond à un personnage,
         	avec comme clefs toutes les informations qu'on a sur ce personnage
         	(dont au moins 'House', 'Courage', 'Ambition', 'Intelligence', 'Good')
 
-        	- new_character : dictionnaire qui correspond à un personnage
+        	- nouveau_perso : dictionnaire qui correspond à un personnage
         	avec comme clefs les caractéristiques qu'on a sur ce personnage
-        	(dont au moins 'Courage', 'Ambition', 'Intelligence' et 'Good')
+        	(dont au moins tous les éléments de caracteristiques)
         	Note : on ne connait pas la maison de ce personnage cible,
         	c'est ce que l'on cherchera à déterminer avec l'algorithme des kPPV
 
     		Sorties : 
-        	- new_character_house : chaîne de caractères, maison prévue
-        	- k_nn : table, (tableau de dictionnaires) contenant les k plus proches
-        	voisins du nouveau personnage, sous forme de dictionnaires.
+        	- maison_nouveau_perso : chaîne de caractères, maison prévue du nouveau personnage 
+        	- k_plus_proches_voisins : tableau de tuples correspondant 
+        	chacun l'un des k plus proches voisins de new_character 
+        	et contenant chacun deux éléments : 
+            		- un dictionnaire, l'un des k plus proches voisins 
+            		du nouveau personnage
+            		- un flottant, la distance entre ce même dictionnaire 
+            		et le nouveau personnage.
+		Note : ce tableau est trié par distance croissante
 	FIN DEFINIR FONCTION
 
 FIN
