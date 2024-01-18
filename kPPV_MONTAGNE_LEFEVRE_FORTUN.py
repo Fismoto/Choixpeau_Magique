@@ -97,21 +97,3 @@ où chaque dictionnaire  correspond à un personnage,
 avec comme clefs toutes les informations que l'on a sur ce personnage
 (dont la maison, le courage, l'ambition, l'intelligence, la tendance au bien)
 '''
-
-def euclidian_distance(character1: dict, character2: dict) -> float:
-    """Calculates the Euclidean distance between two points."""
-    return sqrt(sum((character1[key] - character2[key]) ** 2 for key in ["Intelligence", "Good", "Ambition", "Courage"]))
-
-def knn(data, query_point, k=3):
-    """K-nearest neighbors algorithm."""
-    distances = [(index, euclidian_distance(query_point, item)) for index, item in enumerate(data)]
-    sorted_distances = sorted(distances, key=lambda x: x[1])
-    neighbors = [data[index] for index, _ in sorted_distances[:k]]
-    return neighbors
-
-query_point = {'Intelligence': 8, 'Good': 8, 'Ambition': 8, 'Courage': 9}
-result = knn(poudlard_characters, query_point, k=3)
-
-# Afficher les voisins trouvés
-for neighbor in result:
-    print(f"Name: {neighbor['Name']}, Distance: {euclidian_distance(query_point, neighbor)}")

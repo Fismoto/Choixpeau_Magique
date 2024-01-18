@@ -14,7 +14,7 @@ Licence : CC-BY-NC-SA
 github : https://github.com/Fismoto/Choixpeau_Magique
 
 DEBUT
-	DEFINIR FONCTION distance(base_de_donnees_des_personnages, nouveau_personnage)
+	DEFINIR FONCTION distance_euclidienne(personnage1, personnage2)
 
     		Cette fonction renvoie la table avec la clef 'Distance'
     		ajoutée à chaque dictionnaire.
