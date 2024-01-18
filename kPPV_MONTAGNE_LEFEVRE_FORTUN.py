@@ -21,6 +21,12 @@ from math import sqrt
 
 # Constantes :
 CARACTERISTICS = ('Courage', 'Ambition', 'Intelligence', 'Good')
+
+TESTS_PROFILES = ({'Courage': 9, 'Ambition': 2, 'Intelligence': 8, 'Good': 9}, \
+                  {'Courage': 6, 'Ambition': 7, 'Intelligence': 9, 'Good': 7}, \
+                  {'Courage': 3, 'Ambition': 8, 'Intelligence': 6, 'Good': 3}, \
+                  {'Courage': 2, 'Ambition': 3, 'Intelligence': 7, 'Good': 8}, \
+                  {'Courage': 3, 'Ambition': 4, 'Intelligence': 8, 'Good': 8})
     
 # Définition des fonctions :
 def euclidian_distance(character1: dict, character2: dict, caracteristics=CARACTERISTICS) -> float:
@@ -30,12 +36,13 @@ def euclidian_distance(character1: dict, character2: dict, caracteristics=CARACT
     Cela nous servira pour l'algorithme des kPPV.
     
     Entrées :
-        - character1 et character2 : dictionnaires qui correspondent chacun 
-        à un personnage avec comme clefs au minimum 'Courage', 'Ambition', 
-        'Intelligence' et 'Good'
         - caracteristics : tuple des caracteristiques qui nous
-        permettent de calculer la distance ; 
+        permettent de calculer la distance 
         valeur par défaut : la constante CARACTERISTICS
+        - character1 et character2 : dictionnaires qui correspondent chacun 
+        à un personnage avec comme clefs au minimum 
+        tous les éléments de caracteristics
+
     
     Sorties :
         - flottant, distance euclidienne entre ces deux personnages
@@ -55,9 +62,9 @@ def euclidian_distance(character1: dict, character2: dict, caracteristics=CARACT
                 on veut calculer la distance."
         
     # Sortie :
-    return sqrt(sum((character1[key] - character2[key]) ** 2 for key in caracteristics))
+    return sqrt(sum([(character1[key] - character2[key])**2 for key in caracteristics]))
 
-def knn_house(data: list, query_point: dict, k: int) -> str:
+def knn_house(characters_data_base: list, new_character: dict, caracteristics: tuple, k=3) -> str:
     '''
     Cette fonction renvoie la maison du nouveau personnage, 
     définie avec l'algorithme des kPPV.
@@ -70,16 +77,23 @@ def knn_house(data: list, query_point: dict, k: int) -> str:
 
         - new_character : dictionnaire qui correspond à un personnage
         avec comme clefs les caractéristiques qu'on a sur ce personnage
-        (dont au moins 'Courage', 'Ambition', 'Intelligence' et 'Good')
+        (dont au moins tous les éléments de caracteristics)
         Note : on ne connait pas la maison de ce personnage cible,
         c'est ce que l'on cherchera à déterminer avec l'algorithme des kPPV
 
     Sorties : 
-        - new_character_house : chaîne de caractères, maison prévue
-        - k_nn : table, (tableau de dictionnaires) contenant les k plus proches
-        voisins du nouveau personnage, sous forme de dictionnaires.
-
+        - new_character_house : chaîne de caractères, 
+        maison prévue du nouveau personnage
+        - neighbors : liste de tuples correspondant 
+        chacun l'un des k plus proches voisins de new_character 
+        et contenant chacun deux éléments : 
+            - un dictionnaire, l'un des k plus proches voisins 
+            du nouveau personnage
+            - un flottant, la distance entre ce même dictionnaire 
+            et le nouveau personnage.
+        Note : ce tableau est trié par distance croissante
     '''
+    
     # Préconditions :
     assert type(caracteristics) == tuple or type(caracteristics) == list, \
         "Les caractéristiques doivent être données \
@@ -105,24 +119,51 @@ def knn_house(data: list, query_point: dict, k: int) -> str:
             "Chaque personnage/dictionnaire doit contenir comme clefs \
             toutes les caractéristiques avec lesquelles \
             on veut calculer la distance."
-
-    distances = [(index, euclidian_distance(query_point, item)) for index, item in enumerate(data)]
-    sorted_distances = sorted(distances, key=lambda x: x[1])
-    neighbors = [(data[index], distance) for index, distance in sorted_distances[:k]]
-    slytherin = 0
-    griffindor = 0
-    ravenclaw = 0
-    hufflepuff = 0
-    for i in neighbors :
-        if i[0]['House'] == 'Slytherin' :
-            slytherin += 1
-        elif i[0]['House'] == 'Griffindor' :
-            griffindor += 1
-        elif i[0]['House'] == 'Ravenclaw' :
-            ravenclaw += 1
+    
+    list_of_distances = [(index, euclidian_distance(new_character, character)) for index, character in enumerate(characters_data_base)]
+    list_of_distances.sort(key=lambda x: x[1])
+    k_nearest_neighbors = [(characters_data_base[index], distance) for index, distance in list_of_distances[:k]]
+    
+    houses_of_neighbors = {'Slytherin': 0, 'Griffindor': 0, 'Ravenclaw': 0, \
+                           'Hufflepuf': 0}
+    
+    for neighbor, distance in k_nearest_neighbors :
+        
+        if neighbor['House'] == 'Slytherin' :
+            houses_of_neighbors['Slytherin'] += 1
+            
+        elif neighbor['House'] == 'Griffindor' :
+            houses_of_neighbors['Griffindor'] += 1
+            
+        elif neighbor['House'] == 'Ravenclaw' :
+            houses_of_neighbors['Ravenclaw'] += 1
+            
         else :
-            hufflepuff += 1
-    return neighbors
+            houses_of_neighbors['Hufflepuf'] += 1
+    
+    event_max = 0
+    house_event_max = ''
+    houses_in_conflict = []
+    for house in houses_of_neighbors:
+        if houses_of_neighbors[house] == event_max:
+            houses_in_conflict.append(house_event_max)
+            houses_in_conflict.append(house)
+        elif houses_of_neighbors[house] > event_max:
+            event_max = houses_of_neighbors[house]
+            house_event_max = house
+            houses_in_conflict = []
+        # (Si il y une nouvelle maison majoritaire, il n'y a plus de conflit)
+    
+    # Sortie :
+    if houses_in_conflict == []:
+        return house_event_max  
+        ''', k_nearest_neighbors # à rajouter plus tard '''
+        '''(Pour l'instant, on détecte les cas d'égalité quand 
+        la fonction affiche un gros dictionnaire)'''
+    else:
+    # Coder le cas d'égalité svp
+        return k_nearest_neighbors
+        
 
 # Importation de la table "Characters.csv" :
 with open("Characters.csv", mode='r', encoding='utf-8') as f:
@@ -157,3 +198,7 @@ où chaque dictionnaire  correspond à un personnage,
 avec comme clefs toutes les informations que l'on a sur ce personnage
 (dont la maison, le courage, l'ambition, l'intelligence, la tendance au bien)
 '''
+
+
+for profile in TESTS_PROFILES:
+    print(knn_house(poudlard_characters, profile, CARACTERISTICS, k=3))
