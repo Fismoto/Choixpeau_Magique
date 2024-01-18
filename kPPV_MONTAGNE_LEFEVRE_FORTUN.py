@@ -69,27 +69,31 @@ def distance(characters_data_base, new_character):
     			FIN POUR
         
     '''
+
+def euclidean_distance(point1, point2):
+    return math.sqrt(sum((a - b) ** 2 for a, b in zip(point1, point2)))
+
+def knn_predict(k, training_data, name, input_point):
+    distances = [(euclidean_distance(input_point, x), name) for x, name in zip(training_data, name)]
+    sorted_distances = sorted(distances, key=lambda x: x[0])
+
+    k_nearest_name = [name for _, name in sorted_distances[:k]]
+    counter = Counter(k_nearest_name)
+    prediction = counter.most_common(1)[0][0]
+    print(prediction)
+    
+    return prediction
+
+# Exemple d'utilisation
+training_data = [[1, 2], [2, 3], [3, 4], [4, 5]]
+name = ['A', 'B', 'C', 'D']
+input_point = [2, 3]
+
+k_value = 3
+prediction = knn_predict(k_value, training_data, name, input_point)
+print(f'Prediction: {prediction}')
     data_base_with_distance = characters_data_base
     n = len(characters_data_base)
-    
-    for i in range(0, n - 1):
-        distance = sqrt((new_character['Courage'] + characters_data_base[i]['Courage']**2) 
-                        + (new_character['Ambition'] + characters_data_base[i]['Ambition']**2)
-                        + (new_character['Intelligence'] + characters_data_base[i]['Intelligence']**2)
-                        + (new_character['Good'] + characters_data_base[i]['Good']**2))
-        data_base_with_distance[i]['Distance'] = distance
-    # Préconditions :
-    assert type(characters_data_base) == list, \
-           "La base de donnée être une liste de dictionnaires."
-    
-    for character in characters_data_base:
-        assert type(character) == dict, \
-               "La base de donnée doit être une liste de dictionnaires."
-    
-    data_base_with_distance = characters_data_base.copy()
-    # Cette partie ajoutera la clef 'Distance' à chaque dictionnaire de table_with_distance
-    return data_base_with_distance
-    
     
 # Importation de la table "Characters.csv" :
 with open("Characters.csv", mode='r', encoding='utf-8') as f:
