@@ -19,7 +19,9 @@ github : https://github.com/Fismoto/Choixpeau_Magique
 import csv
 from math import sqrt
 
-
+# Constantes :
+CARACTERISTICS = ('Courage', 'Ambition', 'Intelligence', 'Good')
+    
 # Définition des fonctions :
 def distance(characters_data_base, new_character):
     '''
@@ -69,32 +71,38 @@ def distance(characters_data_base, new_character):
     			FIN POUR
         
     '''
-
-def euclidean_distance(point1, point2):
-    return math.sqrt(sum((a - b) ** 2 for a, b in zip(point1, point2)))
-
-def knn_predict(k, training_data, name, input_point):
-    distances = [(euclidean_distance(input_point, x), name) for x, name in zip(training_data, name)]
-    sorted_distances = sorted(distances, key=lambda x: x[0])
-
-    k_nearest_name = [name for _, name in sorted_distances[:k]]
-    counter = Counter(k_nearest_name)
-    prediction = counter.most_common(1)[0][0]
-    print(prediction)
     
-    return prediction
-
-# Exemple d'utilisation
-training_data = [[1, 2], [2, 3], [3, 4], [4, 5]]
-name = ['A', 'B', 'C', 'D']
-input_point = [2, 3]
-
-k_value = 3
-prediction = knn_predict(k_value, training_data, name, input_point)
-print(f'Prediction: {prediction}')
-    data_base_with_distance = characters_data_base
-    n = len(characters_data_base)
+    for i in range(0, n - 1):
+        distance = sqrt((new_character['Courage'] + characters_data_base[i]['Courage']**2) 
+                        + (new_character['Ambition'] + characters_data_base[i]['Ambition']**2)
+                        + (new_character['Intelligence'] + characters_data_base[i]['Intelligence']**2)
+                        + (new_character['Good'] + characters_data_base[i]['Good']**2))
+        data_base_with_distance[i]['Distance'] = distance
+    # Préconditions :
+    assert type(characters_data_base) == list, \
+           "La base de donnée être une liste de dictionnaires."
     
+    for character in characters_data_base:
+        assert type(character) == dict, \
+               "La base de donnée doit être une liste de dictionnaires."
+    
+    data_base_with_distance = characters_data_base.copy()
+    # Cette partie ajoutera la clef 'Distance' à chaque dictionnaire de table_with_distance
+    return data_base_with_distance
+
+def euclidian_distance(character1: dict, character2: dict) -> float:
+    """Calculates the Euclidean distance between two points."""
+    return sqrt(sum((character1[key] - character2[key]) ** 2 for key in ["Intelligence", "Good", "Ambition"]))
+
+def knn(data, query_point, k=3):
+    """K-nearest neighbors algorithm."""
+    distances = [(index, euclidian_distance(query_point, item)) for index, item in enumerate(data)]
+    sorted_distances = sorted(distances, key=lambda x: x[1])
+    neighbors = [data[index] for index, _ in sorted_distances[:k]]
+    return neighbors
+
+
+
 # Importation de la table "Characters.csv" :
 with open("Characters.csv", mode='r', encoding='utf-8') as f:
     reader = csv.DictReader(f, delimiter=';')
@@ -116,6 +124,11 @@ for poudlard_character in characteristics_tab:
     for kaggle_character in characters_tab:
         if poudlard_character['Name'] == kaggle_character['Name']:
             poudlard_character.update(kaggle_character)
+            
+            # On transforme les caractéristiques en entiers
+            for caracteristic in CARACTERISTICS:
+                poudlard_character[caracteristic] = int(poudlard_character[caracteristic])
+                
             poudlard_characters.append(poudlard_character)
 '''
 La table poudlard_characters est maintenant une liste de dictionnaires
@@ -123,3 +136,21 @@ où chaque dictionnaire  correspond à un personnage,
 avec comme clefs toutes les informations que l'on a sur ce personnage
 (dont la maison, le courage, l'ambition, l'intelligence, la tendance au bien)
 '''
+
+def euclidian_distance(character1: dict, character2: dict) -> float:
+    """Calculates the Euclidean distance between two points."""
+    return sqrt(sum((character1[key] - character2[key]) ** 2 for key in ["Intelligence", "Good", "Ambition", "Courage"]))
+
+def knn(data, query_point, k=3):
+    """K-nearest neighbors algorithm."""
+    distances = [(index, euclidian_distance(query_point, item)) for index, item in enumerate(data)]
+    sorted_distances = sorted(distances, key=lambda x: x[1])
+    neighbors = [data[index] for index, _ in sorted_distances[:k]]
+    return neighbors
+
+query_point = {'Intelligence': 1, 'Good': 1, 'Ambition': 1, 'Courage': 1}
+result = knn(poudlard_characters, query_point, k=15)
+
+# Afficher les voisins trouvés
+for neighbor in result:
+    print(neighbor)
