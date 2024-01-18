@@ -55,9 +55,9 @@ def euclidian_distance(character1: dict, character2: dict, caracteristics=CARACT
                 on veut calculer la distance."
         
     # Sortie :
-    return sqrt(sum([(character1[key] - character2[key])**2 for key in caracteristics]))
+    return sqrt(sum((character1[key] - character2[key]) ** 2 for key in caracteristics))
 
-def knn_house(characters_data_base: list, new_character: dict, caracteristics: tuple, k=3) -> str:
+def knn_house(data: list, query_point: dict, k: int) -> str:
     '''
     Cette fonction renvoie la maison du nouveau personnage, 
     définie avec l'algorithme des kPPV.
@@ -105,15 +105,24 @@ def knn_house(characters_data_base: list, new_character: dict, caracteristics: t
             "Chaque personnage/dictionnaire doit contenir comme clefs \
             toutes les caractéristiques avec lesquelles \
             on veut calculer la distance."
-    
-    
-    
-    data_base_with_distance = [character.update({'Distance': euclidian_distance(character, new_character)}) for character in characters_data_base]
-    # Cette partie ajoutera la clef 'Distance' à chaque dictionnaire de table_with_distance
 
-    
-    return data_base_with_distance
-
+    distances = [(index, euclidian_distance(query_point, item)) for index, item in enumerate(data)]
+    sorted_distances = sorted(distances, key=lambda x: x[1])
+    neighbors = [(data[index], distance) for index, distance in sorted_distances[:k]]
+    slytherin = 0
+    griffindor = 0
+    ravenclaw = 0
+    hufflepuff = 0
+    for i in neighbors :
+        if i[0]['House'] == 'Slytherin' :
+            slytherin += 1
+        elif i[0]['House'] == 'Griffindor' :
+            griffindor += 1
+        elif i[0]['House'] == 'Ravenclaw' :
+            ravenclaw += 1
+        else :
+            hufflepuff += 1
+    return neighbors
 
 # Importation de la table "Characters.csv" :
 with open("Characters.csv", mode='r', encoding='utf-8') as f:
