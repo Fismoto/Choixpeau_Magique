@@ -40,28 +40,79 @@ def euclidian_distance(character1: dict, character2: dict, caracteristics=CARACT
     Sorties :
         - flottant, distance euclidienne entre ces deux personnages
     '''
+    # Préconditions :        
+    assert type(caracteristics) == tuple or type(caracteristics) == list, \
+        "Les caractéristiques doivent être données \
+        sous forme de tuple ou de liste."
+        
     for character in (character1, character2):
         assert type(character) == dict, \
             "La base de donnée doit être une liste de dictionnaires."
         for caracteristic in caracteristics:
             assert caracteristic in character, \
-                "Chaque dictionnaire/personnage doit contenir comme clefs \
+                "Chaque personnage/dictionnaire doit contenir comme clefs \
                 toutes les caractéristiques avec lesquelles \
                 on veut calculer la distance."
+        
+    # Sortie :
+    return sqrt(sum([(character1[key] - character2[key])**2 for key in caracteristics]))
+
+def knn_house(characters_data_base: list, new_character: dict, caracteristics: tuple, k=3) -> str:
+    '''
+    Cette fonction renvoie la maison du nouveau personnage, 
+    définie avec l'algorithme des kPPV.
     
+    Entrées :
+        - characters_data_base : table (tableau de dictionnaires) 
+        où chaque dictionnaire  correspond à un personnage,
+        avec comme clefs toutes les informations qu'on a sur ce personnage
+        (dont au moins 'House', 'Courage', 'Ambition', 'Intelligence', 'Good')
+
+        - new_character : dictionnaire qui correspond à un personnage
+        avec comme clefs les caractéristiques qu'on a sur ce personnage
+        (dont au moins 'Courage', 'Ambition', 'Intelligence' et 'Good')
+        Note : on ne connait pas la maison de ce personnage cible,
+        c'est ce que l'on cherchera à déterminer avec l'algorithme des kPPV
+
+    Sorties : 
+        - new_character_house : chaîne de caractères, maison prévue
+        - k_nn : table, (tableau de dictionnaires) contenant les k plus proches
+        voisins du nouveau personnage, sous forme de dictionnaires.
+
+    '''
+    # Préconditions :
     assert type(caracteristics) == tuple or type(caracteristics) == list, \
         "Les caractéristiques doivent être données \
         sous forme de tuple ou de liste."
         
-        
-    return sqrt(sum([(character1[key] - character2[key])**2 for key in caracteristics]))
+    assert type(characters_data_base) == list, \
+           "La base de donnée être une liste de dictionnaires."
+    
+    for character in characters_data_base:        
+        assert type(character) == dict, \
+               "La base de donnée doit être une liste de dictionnaires."               
+        for caracteristic in caracteristics:
+            assert caracteristic in character, \
+                "Chaque personnage/dictionnaire doit contenir comme clefs \
+                toutes les caractéristiques avec lesquelles \
+                on veut calculer la distance."
+            
+    assert type(new_character) == dict, \
+           "Le nouveau personnage doit être sous forme de dictionnaire."
+           
+    for caracteristic in caracteristics:
+        assert caracteristic in new_character, \
+            "Chaque personnage/dictionnaire doit contenir comme clefs \
+            toutes les caractéristiques avec lesquelles \
+            on veut calculer la distance."
+    
+    
+    
+    data_base_with_distance = [character.update({'Distance': euclidian_distance(character, new_character)}) for character in characters_data_base]
+    # Cette partie ajoutera la clef 'Distance' à chaque dictionnaire de table_with_distance
 
-def knn(data, query_point, k=3):
-    """K-nearest neighbors algorithm."""
-    distances = [(index, euclidian_distance(query_point, item)) for index, item in enumerate(data)]
-    sorted_distances = sorted(distances, key=lambda x: x[1])
-    neighbors = [data[index] for index, _ in sorted_distances[:k]]
-    return neighbors
+    
+    return data_base_with_distance
 
 
 # Importation de la table "Characters.csv" :
