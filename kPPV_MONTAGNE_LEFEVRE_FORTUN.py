@@ -16,7 +16,7 @@ github : https://github.com/Fismoto/Choixpeau_Magique
 '''
 
 # Importation des modules :
-import csv
+from csv import DictReader
 from math import sqrt
 
 # Constantes :
@@ -66,14 +66,14 @@ def knn(data, query_point, k=3):
 
 # Importation de la table "Characters.csv" :
 with open("Characters.csv", mode='r', encoding='utf-8') as f:
-    reader = csv.DictReader(f, delimiter=';')
+    reader = DictReader(f, delimiter=';')
     characters_tab = [{key : value.replace('\xa0', ' ') for key, \
                        value in element.items()} for element in reader]
 
 
 # Importation de la table "Caracteristiques_des_persos.csv" :
 with open("Caracteristiques_des_persos.csv", mode='r', encoding='utf-8') as f:
-    reader = csv.DictReader(f, delimiter=';')
+    reader = DictReader(f, delimiter=';')
     characteristics_tab = [{key : value for key, value in element.items()} \
                            for element in reader]
     
