@@ -93,21 +93,16 @@ def distance(characters_data_base, new_character):
     return data_base_with_distance
 
 def euclidian_distance(character1: dict, character2: dict) -> float:
-    '''
-    Cette fonction calcule la distance entre deux personnages, en utilisant 
-    la formule de la distance euclidienne.
-    Cela nous servira pour l'algorithme des kPPV.
-    
-    Entrées :
-        - character1 et character2 : dictionnaires qui correspondent chacun 
-        à un personnage avec comme clefs au minimum 'Courage', 'Ambition', 
-        'Intelligence' et 'Good'
-    
-    Sorties :
-        - distance euclidienne entre ces deux personnages
-    '''
-    list_of_distances = [(character1[caracteristic] - character2[caracteristic])**2 for caracteristic in CARACTERISTICS]
-    return sqrt(sum(list_of_distances))
+    """Calculates the Euclidean distance between two points."""
+    return sqrt(sum((character1[key] - character2[key]) ** 2 for key in ["Intelligence", "Good", "Ambition"]))
+
+def knn(data, query_point, k=3):
+    """K-nearest neighbors algorithm."""
+    distances = [(index, euclidian_distance(query_point, item)) for index, item in enumerate(data)]
+    sorted_distances = sorted(distances, key=lambda x: x[1])
+    neighbors = [data[index] for index, _ in sorted_distances[:k]]
+    return neighbors
+
 
 # Importation de la table "Characters.csv" :
 with open("Characters.csv", mode='r', encoding='utf-8') as f:
@@ -143,6 +138,20 @@ avec comme clefs toutes les informations que l'on a sur ce personnage
 (dont la maison, le courage, l'ambition, l'intelligence, la tendance au bien)
 '''
 
-print(poudlard_characters[0], poudlard_characters[1])
+def euclidian_distance(character1: dict, character2: dict) -> float:
+    """Calculates the Euclidean distance between two points."""
+    return sqrt(sum((character1[key] - character2[key]) ** 2 for key in ["Intelligence", "Good", "Ambition", "Courage"]))
 
-print(euclidian_distance(poudlard_characters[0], poudlard_characters[1]))
+def knn(data, query_point, k=3):
+    """K-nearest neighbors algorithm."""
+    distances = [(index, euclidian_distance(query_point, item)) for index, item in enumerate(data)]
+    sorted_distances = sorted(distances, key=lambda x: x[1])
+    neighbors = [data[index] for index, _ in sorted_distances[:k]]
+    return neighbors
+
+query_point = {'Intelligence': 8, 'Good': 8, 'Ambition': 8, 'Courage': 9}
+result = knn(poudlard_characters, query_point, k=3)
+
+# Afficher les voisins trouvés
+for neighbor in result:
+    print(f"Name: {neighbor['Name']}, Distance: {euclidian_distance(query_point, neighbor)}")
