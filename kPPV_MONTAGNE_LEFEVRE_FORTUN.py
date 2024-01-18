@@ -107,7 +107,7 @@ def euclidian_distance(character1: dict, character2: dict, caracteristics=CARACT
         valeur par défaut : la constante CARACTERISTICS
     
     Sorties :
-        - distance euclidienne entre ces deux personnages
+        - flottant, distance euclidienne entre ces deux personnages
     '''
     for character in (character1, character2):
         assert type(character) == dict, \
@@ -116,11 +116,12 @@ def euclidian_distance(character1: dict, character2: dict, caracteristics=CARACT
             assert caracteristic in character, \
                 "Chaque dictionnaire/personnage doit contenir comme clefs \
                 toutes les caractéristiques avec lesquelles \
-                on veut calculer la distance"
+                on veut calculer la distance."
     
     assert type(caracteristics) == tuple or type(caracteristics) == list, \
         "Les caractéristiques doivent être données \
         sous forme de tuple ou de liste."
+        
         
     return sqrt(sum([(character1[key] - character2[key])**2 for key in caracteristics]))
 
