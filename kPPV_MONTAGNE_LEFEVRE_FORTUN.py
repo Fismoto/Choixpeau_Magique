@@ -22,10 +22,10 @@ from math import sqrt
 # Constantes :
 CARACTERISTICS = ('Courage', 'Ambition', 'Intelligence', 'Good')
 
-TESTS_PROFILES = ({'Courage': 9, 'Ambition': 2, 'Intelligence': 8, 'Good': 9}, \
-                  {'Courage': 6, 'Ambition': 7, 'Intelligence': 9, 'Good': 7}, \
-                  {'Courage': 3, 'Ambition': 8, 'Intelligence': 6, 'Good': 3}, \
-                  {'Courage': 2, 'Ambition': 3, 'Intelligence': 7, 'Good': 8}, \
+TESTS_PROFILES = ({'Courage': 9, 'Ambition': 2, 'Intelligence': 8, 'Good': 9},\
+                  {'Courage': 6, 'Ambition': 7, 'Intelligence': 9, 'Good': 7},\
+                  {'Courage': 3, 'Ambition': 8, 'Intelligence': 6, 'Good': 3},\
+                  {'Courage': 2, 'Ambition': 3, 'Intelligence': 7, 'Good': 8},\
                   {'Courage': 3, 'Ambition': 4, 'Intelligence': 8, 'Good': 8})
     
 # Définition des fonctions :
@@ -63,6 +63,7 @@ def euclidian_distance(character1: dict, character2: dict, caracteristics=CARACT
         
     # Sortie :
     return sqrt(sum([(character1[key] - character2[key])**2 for key in caracteristics]))
+
 
 def knn_house(characters_data_base: list, new_character: dict, caracteristics: tuple, k=3) -> str:
     '''
@@ -121,7 +122,7 @@ def knn_house(characters_data_base: list, new_character: dict, caracteristics: t
             on veut calculer la distance."
     
     list_of_distances = [(index, euclidian_distance(new_character, character)) for index, character in enumerate(characters_data_base)]
-    list_of_distances.sort(key=lambda x: x[1])
+    list_of_distances.sort(key=lambda character: character[1])
     k_nearest_neighbors = [(characters_data_base[index], distance) for index, distance in list_of_distances[:k]]
     
     houses_of_neighbors = {'Slytherin': 0, 'Griffindor': 0, 'Ravenclaw': 0, \
@@ -146,25 +147,24 @@ def knn_house(characters_data_base: list, new_character: dict, caracteristics: t
     houses_in_conflict = []
     for house in houses_of_neighbors:
         if houses_of_neighbors[house] == event_max:
-            houses_in_conflict.append(house_event_max)
             houses_in_conflict.append(house)
+            houses_in_conflict.append(house_event_max)
         elif houses_of_neighbors[house] > event_max:
             event_max = houses_of_neighbors[house]
             house_event_max = house
-            houses_in_conflict = []
-        # (Si il y une nouvelle maison majoritaire, il n'y a plus de conflit)
-    
-    # Sortie :
-    if houses_in_conflict == []:
-        return house_event_max  
-        ''', k_nearest_neighbors # à rajouter plus tard '''
-        '''(Pour l'instant, on détecte les cas d'égalité quand 
-        la fonction affiche un gros dictionnaire)'''
-    else:
-    # Coder le cas d'égalité svp
-        return k_nearest_neighbors
-        
 
+
+    # Sortie :
+    if len(houses_in_conflict) == 0:
+        return house_event_max, k_nearest_neighbors
+    
+    else:
+        for neighbor in k_nearest_neighbors:
+            for house in houses_in_conflict:
+                if neighbor[0]['House'] == house:
+                    return house, k_nearest_neighbors
+    
+    
 # Importation de la table "Characters.csv" :
 with open("Characters.csv", mode='r', encoding='utf-8') as f:
     reader = DictReader(f, delimiter=';')
@@ -201,4 +201,4 @@ avec comme clefs toutes les informations que l'on a sur ce personnage
 
 
 for profile in TESTS_PROFILES:
-    print(knn_house(poudlard_characters, profile, CARACTERISTICS, k=3))
+    print(knn_house(poudlard_characters, profile, CARACTERISTICS, k=1))

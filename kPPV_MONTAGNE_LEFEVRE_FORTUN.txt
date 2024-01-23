@@ -35,6 +35,7 @@ DEBUT
         	- flottant, distance euclidienne entre ces deux personnages
 
 		Préconditions :
+		- caracteristiques est un p-uplet ou un tableau
 		- personnage1 et personnage2 sont tous deux des dictionnaires
 		- personnage1 et personnage2 contiennent comme clefs tous les éléments de caracteristiques
 		
@@ -64,6 +65,8 @@ DEBUT
         	Note : on ne connait pas la maison de ce personnage cible,
         	c'est ce que l'on cherchera à déterminer avec l'algorithme des kPPV
 
+		- k : entier, nombre de plus proches voisins pris en compte
+
     		Sorties : 
         	- maison_nouveau_perso : chaîne de caractères, maison prévue du nouveau personnage 
         	- k_plus_proches_voisins : tableau de tuples correspondant 
@@ -74,6 +77,25 @@ DEBUT
             		- un flottant, la distance entre ce même dictionnaire 
             		et le nouveau personnage.
 		Note : ce tableau est trié par distance croissante
+
+		Préconditions :
+		- caracteristiques est un p-uplet ou un tableau
+		- base_de_donnee_des_persos est un tableau de dictionnaires
+		- chaque dictionnaire de la table base_de_donnee_des_persos contient 
+		comme clefs tous les éléments de caractéristiques
+		- nouveau_perso est un dictionnaire avec comme clefs 
+		au moins tous les éléments de caractéristiques
+
+		Variables :
+		- liste_des_distances : tableau
+		- k_plus_proches_voisins : tableau
+		- maisons_des_voisins : dictionnaire ; 
+			valeur initiale : {'Slytherin': 0, 'Griffindor': 0, 'Ravenclaw': 0, \
+                        		'Hufflepuf': 0}
+
+		DEBUT
+			
+		FIN
 	FIN DEFINIR FONCTION
 
 FIN
