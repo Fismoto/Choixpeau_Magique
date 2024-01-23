@@ -94,7 +94,8 @@ DEBUT
                         		'Hufflepuf': 0}
 
 		DEBUT
-			
+			liste_des_distances = [(index, distance_euclidienne()) POUR index INCREMENTE ET POUR personnage DANS base_de_donnee_des_persos]
+										# (en python : for index, personnage in enumerate(base_de_donnee_des_persos)
 		FIN
 	FIN DEFINIR FONCTION
 
