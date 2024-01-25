@@ -124,6 +124,7 @@ def knn_house(characters_data_base: list, new_character: dict, caracteristics: t
     list_of_distances = [(index, euclidian_distance(new_character, character)) for index, character in enumerate(characters_data_base)]
     list_of_distances.sort(key=lambda character: character[1])
     k_nearest_neighbors = [(characters_data_base[index], distance) for index, distance in list_of_distances[:k]]
+    print(k_nearest_neighbors)
     
     houses_of_neighbors = {'Slytherin': 0, 'Griffindor': 0, 'Ravenclaw': 0, \
                            'Hufflepuf': 0}
