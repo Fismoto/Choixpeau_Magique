@@ -71,6 +71,10 @@ def knn_house(characters_data_base: list, new_character: dict, caracteristics: t
     définie avec l'algorithme des kPPV.
     
     Entrées :
+        - caracteristics : tuple des caracteristiques qui nous
+        	permettent de calculer la distance ; 
+        	valeur par défaut : la constante CARACTERISTICS
+            
         - characters_data_base : table (tableau de dictionnaires) 
         où chaque dictionnaire  correspond à un personnage,
         avec comme clefs toutes les informations qu'on a sur ce personnage
@@ -81,6 +85,9 @@ def knn_house(characters_data_base: list, new_character: dict, caracteristics: t
         (dont au moins tous les éléments de caracteristics)
         Note : on ne connait pas la maison de ce personnage cible,
         c'est ce que l'on cherchera à déterminer avec l'algorithme des kPPV
+        
+		- k : entier, nombre de plus proches voisins pris en compte ; 
+        valeur par défaut : 5
 
     Sorties : 
         - new_character_house : chaîne de caractères, 
@@ -120,6 +127,7 @@ def knn_house(characters_data_base: list, new_character: dict, caracteristics: t
             "Chaque personnage/dictionnaire doit contenir comme clefs \
             toutes les caractéristiques avec lesquelles \
             on veut calculer la distance."
+    assert type(k) == int, "k doit être sous forme d'entier."
     
     list_of_distances = [(index, euclidian_distance(new_character, character)) for index, character in enumerate(characters_data_base)]
     list_of_distances.sort(key=lambda character: character[1])
