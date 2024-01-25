@@ -65,7 +65,7 @@ def euclidian_distance(character1: dict, character2: dict, caracteristics=CARACT
     return sqrt(sum([(character1[key] - character2[key])**2 for key in caracteristics]))
 
 
-def knn_house(characters_data_base: list, new_character: dict, caracteristics: tuple, k=3) -> str:
+def knn_house(characters_data_base: list, new_character: dict, caracteristics: tuple, k=5) -> str:
     '''
     Cette fonction renvoie la maison du nouveau personnage, 
     définie avec l'algorithme des kPPV.
@@ -142,27 +142,11 @@ def knn_house(characters_data_base: list, new_character: dict, caracteristics: t
         else :
             houses_of_neighbors['Hufflepuf'] += 1
     
-    event_max = 0
-    house_event_max = ''
-    houses_in_conflict = []
-    for house in houses_of_neighbors:
-        if houses_of_neighbors[house] == event_max:
-            houses_in_conflict.append(house)
-            houses_in_conflict.append(house_event_max)
-        elif houses_of_neighbors[house] > event_max:
-            event_max = houses_of_neighbors[house]
-            house_event_max = house
-
-
-    # Sortie :
-    if len(houses_in_conflict) == 0:
-        return house_event_max, k_nearest_neighbors
+    houses_of_neighbors = sorted(houses_of_neighbors.items(), key = lambda house : house[1])
+    houses_of_neighbors.reverse()
     
-    else:
-        for neighbor in k_nearest_neighbors:
-            for house in houses_in_conflict:
-                if neighbor[0]['House'] == house:
-                    return house, k_nearest_neighbors
+    
+
     
     
 # Importation de la table "Characters.csv" :
@@ -201,4 +185,4 @@ avec comme clefs toutes les informations que l'on a sur ce personnage
 
 
 for profile in TESTS_PROFILES:
-    print(knn_house(poudlard_characters, profile, CARACTERISTICS, k=1))
+    print(knn_house(poudlard_characters, profile, CARACTERISTICS, k=5))
