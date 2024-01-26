@@ -144,8 +144,21 @@ def knn_house(characters_data_base: list, new_character: dict, caracteristics: t
         else:
             houses_of_neighbors[neighbor['House']] = 1
     
-    houses_of_neighbors = sorted(houses_of_neighbors.items(), key = lambda house: house[1])
+    houses_of_neighbors = sorted(houses_of_neighbors.items(), \
+                                 key = lambda house: house[1])
     houses_of_neighbors.reverse()
+    
+    if houses_of_neighbors[0][1] > houses_of_neighbors[1][1]:
+        return houses_of_neighbors[0][0]
+    
+    else:
+        for neighbor in k_nearest_neighbors:
+            if neighbor['House'] in {houses_of_neighbors[0][0], houses_of_neighbors[1][0]}:
+                return neighbor['House']
+    # On ne gère pas les cas de triple égalité
+ 
+            
+            
     
 
     
