@@ -149,18 +149,38 @@ def knn_house(characters_data_base: list, new_character: dict, caracteristics: t
     houses_of_neighbors.reverse()
     
     if houses_of_neighbors[0][1] > houses_of_neighbors[1][1]:
-        return houses_of_neighbors[0][0]
+        return houses_of_neighbors[0][0], k_nearest_neighbors
     
     else:
         for neighbor in k_nearest_neighbors:
             if neighbor['House'] in {houses_of_neighbors[0][0], houses_of_neighbors[1][0]}:
-                return neighbor['House']
+                return neighbor['House'], k_nearest_neighbors
     # On ne gère pas les cas de triple égalité
- 
-            
-            
-    
 
+def affichage(profile : dict, house : str, neighbors : list) -> None:
+    '''    
+    '''
+    # Préconditions :
+    assert house in {'Gryffindor', 'Ravenclaw', 'Slytherin', 'Hufflepuff'}, \
+        "La maison retenue du personnage doit être une maison d'Harry Potter."
+    assert type(profile) == dict, \
+        "Le nouveau personnage doit être sous forme de dictionnaire."
+     
+    assert type(neighbors) == list, \
+        "La base de donnée être une liste de dictionnaires."
+ 
+    for neighbor in neighbors:        
+        assert type(neighbor) == dict, \
+            "La base de donnée doit être une liste de dictionnaires."               
+        for caracteristic in profile:
+            assert caracteristic in neighbor, \
+                "Chaque personnage/dictionnaire doit contenir comme clefs \
+                    toutes les caractéristiques avec lesquelles \
+                        on veut calculer la distance."
+    
+    print(f"Caractéristiques du perso : {profile}")
+    print(f"k plus proches voisins : blabla")
+    print(f"maison : blabla") 
     
     
 # Importation de la table "Characters.csv" :
@@ -199,4 +219,5 @@ avec comme clefs toutes les informations que l'on a sur ce personnage
 
 
 for profile in TESTS_PROFILES:
-    print(knn_house(poudlard_characters, profile, CARACTERISTICS, k=5))
+    house, k_n_neighbors = knn_house(poudlard_characters, profile, CARACTERISTICS, k=5)
+    affichage(profile, house, k_n_neighbors)
