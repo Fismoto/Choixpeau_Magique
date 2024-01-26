@@ -129,31 +129,23 @@ def knn_house(characters_data_base: list, new_character: dict, caracteristics: t
             on veut calculer la distance."
     assert type(k) == int, "k doit être sous forme d'entier."
     
-    list_of_distances = [(index, euclidian_distance(new_character, character)) for index, character in enumerate(characters_data_base)]
-    list_of_distances.sort(key=lambda character: character[1])
-    k_nearest_neighbors = [(characters_data_base[index], distance) for index, distance in list_of_distances[:k]]
-    print(k_nearest_neighbors)
+    data_base_changed = characters_data_base.copy()
+    for i in range(len(data_base_changed)):
+        data_base_changed[i]['Distance'] = euclidian_distance(new_character, data_base_changed[i])
+
+    data_base_changed.sort(key=lambda character: character['Distance'])
+    k_nearest_neighbors = data_base_changed[:k]
     
-    houses_of_neighbors = {'Slytherin': 0, 'Griffindor': 0, 'Ravenclaw': 0, \
-                           'Hufflepuf': 0}
+    houses_of_neighbors = {}
     
-    for neighbor, distance in k_nearest_neighbors :
-        
-        if neighbor['House'] == 'Slytherin' :
-            houses_of_neighbors['Slytherin'] += 1
-            
-        elif neighbor['House'] == 'Griffindor' :
-            houses_of_neighbors['Griffindor'] += 1
-            
-        elif neighbor['House'] == 'Ravenclaw' :
-            houses_of_neighbors['Ravenclaw'] += 1
-            
-        else :
-            houses_of_neighbors['Hufflepuf'] += 1
+    for neighbor in k_nearest_neighbors :        
+        if neighbor['House'] in houses_of_neighbors:
+            houses_of_neighbors[neighbor['House']] += 1
+        else:
+            houses_of_neighbors[neighbor['House']] = 1
     
-    houses_of_neighbors = sorted(houses_of_neighbors.items(), key = lambda house : house[1])
+    houses_of_neighbors = sorted(houses_of_neighbors.items(), key = lambda house: house[1])
     houses_of_neighbors.reverse()
-    
     
 
     
