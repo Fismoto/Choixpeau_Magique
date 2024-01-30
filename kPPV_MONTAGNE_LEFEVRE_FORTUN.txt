@@ -95,11 +95,30 @@ DEBUT
 
 		DEBUT
 			base_de_donnee_modifiee = COPIE de base_de_donnee_des_persos # (pour ne pas modifier de variable globale)
+			
 			POUR i ALLANT de 0 A LONGUEUR de base_de_donnee_modifiee 
         			base_de_donnee_modifiee[i]['Distance'] = distance_euclidienne(nouveau_perso, base_de_donnee_modifiee[i], caracteristiques=CARACTERISTIQUES)
 			FIN POUR
+
 			TRIER base_de_donnee_modifiee PAR CLEF 'Distance' croissante
 			k_plus_proches_voisins = base_de_donnee_modifiee[:k]
+			
+			POUR voisin DANS k_plus_proches_voisins
+				SI voisin['Maison'] EST DANS maisons_des_voisins
+					maisons_des_voisins[voisin['Maison']] = maisons_des_voisins[voisin['Maison']] + 1
+				SINON
+					maisons_des_voisins[voisin['Maison']] = 1
+				FIN SI
+			FIN POUR
+			
+			items_maisons_des_voisins = tri(maisons_des_voisins.items(), clef = 'Maison')
+			INVERSER LE SENS DE items_maisons_des_voisins 
+			
+			SI items_maisons_des_voisins[0][1] > items_maisons_des_voisins[1][1]
+				RENVOYER (items_maisons_des_voisins[0][0], k_plus_proches_voisins)
+			SINON
+				POUR voisin
+			FIN SI
 		FIN
 	FIN DEFINIR FONCTION
 
