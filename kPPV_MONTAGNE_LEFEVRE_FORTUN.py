@@ -127,12 +127,13 @@ def knn_house(characters_data_base: list, new_character: dict, caracteristics: t
             "Chaque personnage/dictionnaire doit contenir comme clefs \
             toutes les caractéristiques avec lesquelles \
             on veut calculer la distance."
-    assert type(k) == int, "k doit être sous forme d'entier."
+    assert type(k) == int and k > 0, "k doit être sous forme d'entier positif."
     
     # Pour ne pas modifier de variable globale :
     data_base_changed = characters_data_base.copy()
     for i in range(len(data_base_changed)):
-        data_base_changed[i]['Distance'] = euclidian_distance(new_character, data_base_changed[i])
+        data_base_changed[i]['Distance'] = euclidian_distance(new_character, \
+                        data_base_changed[i], caracteristics=CARACTERISTICS)
 
     data_base_changed.sort(key=lambda character: character['Distance'])
     k_nearest_neighbors = data_base_changed[:k]

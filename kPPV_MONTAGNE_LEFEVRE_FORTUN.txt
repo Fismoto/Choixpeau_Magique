@@ -85,17 +85,21 @@ DEBUT
 		comme clefs tous les éléments de caractéristiques
 		- nouveau_perso est un dictionnaire avec comme clefs 
 		au moins tous les éléments de caractéristiques
+		- k est un entier strictement positif
 
 		Variables :
-		- liste_des_distances : tableau
+		- base_de_donnee_modifiee : tableau
 		- k_plus_proches_voisins : tableau
-		- maisons_des_voisins : dictionnaire ; 
-			valeur initiale : {'Slytherin': 0, 'Griffindor': 0, 'Ravenclaw': 0, \
-                        		'Hufflepuf': 0}
+		- maisons_des_voisins : dictionnaire
+		- voisin : dictionnaire, variable de parcours séquentiel
 
 		DEBUT
-			liste_des_distances = [(index, distance_euclidienne()) POUR index INCREMENTE ET POUR personnage DANS base_de_donnee_des_persos]
-										# (en python : for index, personnage in enumerate(base_de_donnee_des_persos)
+			base_de_donnee_modifiee = COPIE de base_de_donnee_des_persos # (pour ne pas modifier de variable globale)
+			POUR i ALLANT de 0 A LONGUEUR de base_de_donnee_modifiee 
+        			base_de_donnee_modifiee[i]['Distance'] = distance_euclidienne(nouveau_perso, base_de_donnee_modifiee[i], caracteristiques=CARACTERISTIQUES)
+			FIN POUR
+			TRIER base_de_donnee_modifiee PAR CLEF 'Distance' croissante
+			k_plus_proches_voisins = base_de_donnee_modifiee[:k]
 		FIN
 	FIN DEFINIR FONCTION
 
