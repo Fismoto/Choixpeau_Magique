@@ -127,11 +127,13 @@ def knn_house(characters_data_base: list, new_character: dict, caracteristics: t
             "Chaque personnage/dictionnaire doit contenir comme clefs \
             toutes les caractéristiques avec lesquelles \
             on veut calculer la distance."
-    assert type(k) == int, "k doit être sous forme d'entier."
+    assert type(k) == int and k > 0, "k doit être sous forme d'entier positif."
     
+    # Pour ne pas modifier de variable globale :
     data_base_changed = characters_data_base.copy()
     for i in range(len(data_base_changed)):
-        data_base_changed[i]['Distance'] = euclidian_distance(new_character, data_base_changed[i])
+        data_base_changed[i]['Distance'] = euclidian_distance(new_character, \
+                        data_base_changed[i], caracteristics=CARACTERISTICS)
 
     data_base_changed.sort(key=lambda character: character['Distance'])
     k_nearest_neighbors = data_base_changed[:k]
@@ -144,21 +146,25 @@ def knn_house(characters_data_base: list, new_character: dict, caracteristics: t
         else:
             houses_of_neighbors[neighbor['House']] = 1
     
-    houses_of_neighbors = sorted(houses_of_neighbors.items(), \
+    items_houses_of_neighbors = sorted(houses_of_neighbors.items(), \
                                  key = lambda house: house[1])
-    houses_of_neighbors.reverse()
+    items_houses_of_neighbors.reverse()
     
-    if houses_of_neighbors[0][1] > houses_of_neighbors[1][1]:
-        return houses_of_neighbors[0][0], k_nearest_neighbors
+    if items_houses_of_neighbors[0][1] > items_houses_of_neighbors[1][1]:
+        return (items_houses_of_neighbors[0][0], k_nearest_neighbors)
     
     else:
         for neighbor in k_nearest_neighbors:
-            if neighbor['House'] in {houses_of_neighbors[0][0], houses_of_neighbors[1][0]}:
-                return neighbor['House'], k_nearest_neighbors
+            if neighbor['House'] in {items_houses_of_neighbors[0][0], items_houses_of_neighbors[1][0]}:
+                return (neighbor['House'], k_nearest_neighbors)
     # On ne gère pas les cas de triple égalité
 
-def knn_print(profile : dict, house : str, neighbors : list) -> None:
-    '''    
+def knn_print(profile : dict, neighbors : list, house : str) -> None:
+    '''   
+    Cette procédure affiche les caractéristiques du nouveau personnage,
+    ses k plus proches voisins 
+    (avec leurs caractéristiques, maisons et distance du nouveau personnage)
+    et enfin affiche la maison retenue pour ce nouveau personnage.
     '''
     # Préconditions :
     assert house in {'Gryffindor', 'Ravenclaw', 'Slytherin', 'Hufflepuff'}, \
@@ -187,7 +193,6 @@ def knn_print(profile : dict, house : str, neighbors : list) -> None:
                     f"{neighbors[i]['Intelligence']} ; Good : {neighbors[i]['Good']} "\
                         f"et pour distance avec le personnage cible: {neighbors[i]['Distance']}.")
     print(f"\nFinalement, ce personnage cible ira dans la maison {house}.") 
-        
     
     
 # Importation de la table "Characters.csv" :
@@ -227,4 +232,23 @@ avec comme clefs toutes les informations que l'on a sur ce personnage
 
 for profile in TESTS_PROFILES:
     house, k_n_neighbors = knn_house(poudlard_characters, profile, CARACTERISTICS, k=5)
-    knn_print(profile, house, k_n_neighbors)
+    knn_print(profile, k_n_neighbors, house)
+    
+response = input("\n \
+                 \n Voulez-vous entrez vous-même des caractéristiques ? (oui/non) : ")
+
+if response.lower() == "oui":
+    try:
+        k_client = int(input("Donner votre k : "))
+        caracteristics_client = {}    
+        for caracteristic in CARACTERISTICS:
+            caracteristics_client[caracteristic] = int(input(f"\
+                    Valeur de la caractéristique {caracteristic} : "))
+        house, k_n_neighbors = knn_house(poudlard_characters, caracteristics_client, CARACTERISTICS, k=k_client)
+        knn_print(caracteristics_client, k_n_neighbors, house)
+    except:
+        print("Saisie incorrecte, désolé !!")
+
+
+else:
+    print("Dommage, à une prochaîne fois !")
