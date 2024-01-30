@@ -129,6 +129,7 @@ def knn_house(characters_data_base: list, new_character: dict, caracteristics: t
             on veut calculer la distance."
     assert type(k) == int, "k doit être sous forme d'entier."
     
+    # Pour ne pas modifier de variable globale :
     data_base_changed = characters_data_base.copy()
     for i in range(len(data_base_changed)):
         data_base_changed[i]['Distance'] = euclidian_distance(new_character, data_base_changed[i])
@@ -149,16 +150,20 @@ def knn_house(characters_data_base: list, new_character: dict, caracteristics: t
     houses_of_neighbors.reverse()
     
     if houses_of_neighbors[0][1] > houses_of_neighbors[1][1]:
-        return houses_of_neighbors[0][0], k_nearest_neighbors
+        return (houses_of_neighbors[0][0], k_nearest_neighbors)
     
     else:
         for neighbor in k_nearest_neighbors:
             if neighbor['House'] in {houses_of_neighbors[0][0], houses_of_neighbors[1][0]}:
-                return neighbor['House'], k_nearest_neighbors
+                return (neighbor['House'], k_nearest_neighbors)
     # On ne gère pas les cas de triple égalité
 
-def affichage(profile : dict, house : str, neighbors : list) -> None:
-    '''    
+def knn_print(profile : dict, neighbors : list, house : str) -> None:
+    '''   
+    Cette procédure affiche les caractéristiques du nouveau personnage,
+    ses k plus proches voisins 
+    (avec leurs caractéristiques, maisons et distance du nouveau personnage)
+    et enfin affiche la maison retenue pour ce nouveau personnage.
     '''
     # Préconditions :
     assert house in {'Gryffindor', 'Ravenclaw', 'Slytherin', 'Hufflepuff'}, \
@@ -180,7 +185,7 @@ def affichage(profile : dict, house : str, neighbors : list) -> None:
     
     print(f"Caractéristiques du perso : {profile}")
     print(f"k plus proches voisins : blabla")
-    print(f"maison : blabla") 
+    print(f"maison : {house}") 
     
     
 # Importation de la table "Characters.csv" :
@@ -220,4 +225,23 @@ avec comme clefs toutes les informations que l'on a sur ce personnage
 
 for profile in TESTS_PROFILES:
     house, k_n_neighbors = knn_house(poudlard_characters, profile, CARACTERISTICS, k=5)
-    affichage(profile, house, k_n_neighbors)
+    knn_print(profile, k_n_neighbors, house)
+    
+response = input("\n \
+                 \n Voulez-vous entrez vous-même des caractéristiques ? (oui/non) : ")
+
+if response.lower() == "oui":
+    try:
+        k_client = int(input("Donner votre k : "))
+        caracteristics_client = {}    
+        for caracteristic in CARACTERISTICS:
+            caracteristics_client[caracteristic] = int(input(f"\
+                    Valeur de la caractéristique {caracteristic} : "))
+        house, k_n_neighbors = knn_house(poudlard_characters, caracteristics_client, CARACTERISTICS, k=k_client)
+        knn_print(caracteristics_client, k_n_neighbors, house)
+    except:
+        print("Saisie incorrecte, désolé !!")
+
+
+else:
+    print("Dommage, à une prochaîne fois !")
