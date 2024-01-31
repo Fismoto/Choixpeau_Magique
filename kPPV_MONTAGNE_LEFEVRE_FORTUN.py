@@ -92,14 +92,8 @@ def knn_house(characters_data_base: list, new_character: dict, caracteristics: t
     Sorties : 
         - new_character_house : chaîne de caractères, 
         maison prévue du nouveau personnage
-        - neighbors : liste de tuples correspondant 
+        - neighbors : liste de dictionnaires correspondant 
         chacun l'un des k plus proches voisins de new_character 
-        et contenant chacun deux éléments : 
-            - un dictionnaire, l'un des k plus proches voisins 
-            du nouveau personnage
-            - un flottant, la distance entre ce même dictionnaire 
-            et le nouveau personnage.
-        Note : ce tableau est trié par distance croissante
     '''
     
     # Préconditions :
@@ -127,6 +121,7 @@ def knn_house(characters_data_base: list, new_character: dict, caracteristics: t
             "Chaque personnage/dictionnaire doit contenir comme clefs \
             toutes les caractéristiques avec lesquelles \
             on veut calculer la distance."
+            
     assert type(k) == int and k > 0, "k doit être sous forme d'entier positif."
     
     # Pour ne pas modifier de variable globale :

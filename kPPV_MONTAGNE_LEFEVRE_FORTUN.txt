@@ -37,14 +37,15 @@ DEBUT
 		Préconditions :
 		- caracteristiques est un p-uplet ou un tableau
 		- personnage1 et personnage2 sont tous deux des dictionnaires
-		- personnage1 et personnage2 contiennent comme clefs tous les éléments de caracteristiques
+		- personnage1 et personnage2 contiennent tous deux comme clefs tous les éléments de caracteristiques
 		
-		RENVOYER la RACINE CARREE de (SOMME de ([(personnage1[clef] - personnage1[clef])**2 POUR clef DANS caracteristiques]))
-
+		DEBUT
+			RENVOYER la RACINE CARREE de (SOMME de ([(personnage1[clef] - personnage1[clef])**2 POUR clef DANS caracteristiques]))
+		FIN
 	FIN DEFINIR FONCTION
 
 
-	DEFINIR FONCTION kPPV_maison(base_de_donnee_des_persos, nouveau_perso, caracteristiques=CARACTERISTIQUES, k=3)
+	DEFINIR FONCTION kppv_maison(base_de_donnee_des_persos, nouveau_perso, caracteristiques=CARACTERISTIQUES, k=5)
 
 		Cette fonction renvoie la maison du nouveau personnage, 
     		définie avec l'algorithme des kPPV.
@@ -57,7 +58,7 @@ DEBUT
         	- base_de_donnee_des_persos : table (tableau de dictionnaires) 
         	où chaque dictionnaire  correspond à un personnage,
         	avec comme clefs toutes les informations qu'on a sur ce personnage
-        	(dont au moins 'House', 'Courage', 'Ambition', 'Intelligence', 'Good')
+        	(dont au moins 'Maison', 'Courage', 'Ambition', 'Intelligence', 'Tendance au bien')
 
         	- nouveau_perso : dictionnaire qui correspond à un personnage
         	avec comme clefs les caractéristiques qu'on a sur ce personnage
@@ -65,18 +66,13 @@ DEBUT
         	Note : on ne connait pas la maison de ce personnage cible,
         	c'est ce que l'on cherchera à déterminer avec l'algorithme des kPPV
 
-		- k : entier, nombre de plus proches voisins pris en compte
+		- k : entier, nombre de plus proches voisins pris en compte ;
+		valeur par défaut : 5
 
     		Sorties : 
         	- maison_nouveau_perso : chaîne de caractères, maison prévue du nouveau personnage 
-        	- k_plus_proches_voisins : tableau de tuples correspondant 
+        	- k_plus_proches_voisins : tableau de dictionnaires correspondant 
         	chacun l'un des k plus proches voisins de new_character 
-        	et contenant chacun deux éléments : 
-            		- un dictionnaire, l'un des k plus proches voisins 
-            		du nouveau personnage
-            		- un flottant, la distance entre ce même dictionnaire 
-            		et le nouveau personnage.
-		Note : ce tableau est trié par distance croissante
 
 		Préconditions :
 		- caracteristiques est un p-uplet ou un tableau
@@ -94,9 +90,9 @@ DEBUT
 		- voisin : dictionnaire, variable de parcours séquentiel
 
 		DEBUT
-			base_de_donnee_modifiee = COPIE de base_de_donnee_des_persos # (pour ne pas modifier de variable globale)
+			base_de_donnee_modifiee = COPIE DE base_de_donnee_des_persos # (pour ne pas modifier de variable globale)
 			
-			POUR i ALLANT de 0 A LONGUEUR de base_de_donnee_modifiee 
+			POUR i ALLANT de 0 A longueur(base_de_donnee_modifiee)
         			base_de_donnee_modifiee[i]['Distance'] = distance_euclidienne(nouveau_perso, base_de_donnee_modifiee[i], caracteristiques=CARACTERISTIQUES)
 			FIN POUR
 
@@ -117,9 +113,15 @@ DEBUT
 			SI items_maisons_des_voisins[0][1] > items_maisons_des_voisins[1][1]
 				RENVOYER (items_maisons_des_voisins[0][0], k_plus_proches_voisins)
 			SINON
-				POUR voisin
+				# On prend la maison qui arrive en premier (la plus proche) :
+				POUR voisin DANS k_plus_proches_voisins 
+					SI voisin['Maison'] EST DANS {items_maisons_des_voisins[0][0], items_maisons_des_voisins[1][0]}
+						RENVOYER (voisin['Maison'], k_plus_proches_voisins)
+					FIN SI
+					
+				FIN POUR
 			FIN SI
+			# On ne gère pas les cas de triple égalité ou plus
 		FIN
 	FIN DEFINIR FONCTION
-
 FIN
