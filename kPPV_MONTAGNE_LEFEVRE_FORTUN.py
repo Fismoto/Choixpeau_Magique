@@ -187,7 +187,7 @@ def knn_print(profile : dict, neighbors : list, house : str) -> None:
                   f"; Ambition : {neighbors[i]['Ambition']} ; Intelligence : "\
                     f"{neighbors[i]['Intelligence']} ; Good : {neighbors[i]['Good']} "\
                         f"et pour distance avec le personnage cible: {neighbors[i]['Distance']}.")
-    print(f"\nFinalement, ce personnage cible ira dans la maison {house}.") 
+    print(f"\nFinalement, ce personnage cible ira dans la maison {house}.\n") 
     
     
 # Importation de la table "Characters.csv" :
