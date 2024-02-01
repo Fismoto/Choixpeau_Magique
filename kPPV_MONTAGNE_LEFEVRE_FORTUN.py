@@ -148,7 +148,10 @@ def knn_house(characters_data_base: list, new_character: dict, caracteristics: t
                                  key = lambda house: house[1])
     items_houses_of_neighbors.reverse()
     
-    if items_houses_of_neighbors[0][1] > items_houses_of_neighbors[1][1]:
+    if len(items_houses_of_neighbors) == 1:
+        return (items_houses_of_neighbors[0][0], k_nearest_neighbors)
+        
+    elif items_houses_of_neighbors[0][1] > items_houses_of_neighbors[1][1]:
         return (items_houses_of_neighbors[0][0], k_nearest_neighbors)
     
     else:
