@@ -153,7 +153,8 @@ def knn_house(characters_data_base: list, new_character: dict, caracteristics: t
     
     else:
         for neighbor in k_nearest_neighbors:
-            if neighbor['House'] in {items_houses_of_neighbors[0][0], items_houses_of_neighbors[1][0]}:
+            if neighbor['House'] in {items_houses_of_neighbors[0][0], \
+                                     items_houses_of_neighbors[1][0]}:
                 return (neighbor['House'], k_nearest_neighbors)
     # On ne gère pas les cas de triple égalité
 
