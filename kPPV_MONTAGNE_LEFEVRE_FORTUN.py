@@ -182,11 +182,11 @@ def knn_print(profile : dict, neighbors : list, house : str) -> None:
     print(f"\nLe personnage ayant les caractéristiques : {profile} a pour plus proches voisins : \n") 
 
     for i in range(len(neighbors)):
-        print(f"\t - {neighbors[i]['Name']}, de la maison {neighbors[i]['House']} et "\
-              f"qui a pour caractéristiques : \nCourage : {neighbors[i]['Courage']} "\
+        print(f"\t - {neighbors[i]['Name']}, de la maison {neighbors[i]['House']}, qui "\
+              f"a pour caractéristiques : \nCourage : {neighbors[i]['Courage']} "\
                   f"; Ambition : {neighbors[i]['Ambition']} ; Intelligence : "\
                     f"{neighbors[i]['Intelligence']} ; Good : {neighbors[i]['Good']} "\
-                        f"et pour distance avec le personnage cible: {neighbors[i]['Distance']}.")
+                        f"et a une distance avec le personnage cible de : {neighbors[i]['Distance']}.")
     print(f"\nFinalement, ce personnage cible ira dans la maison {house}.\n") 
     
     
@@ -228,7 +228,6 @@ avec comme clefs toutes les informations que l'on a sur ce personnage
 for profile in TESTS_PROFILES:
     house, k_n_neighbors = knn_house(poudlard_characters, profile, CARACTERISTICS, k=5)
     knn_print(profile, k_n_neighbors, house)
-
     
 response = input("\n \
                  \n Voulez-vous entrez vous-même des caractéristiques ? \
