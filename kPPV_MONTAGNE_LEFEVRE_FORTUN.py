@@ -124,6 +124,9 @@ def knn_house(characters_data_base: list, new_character: dict, caracteristics: t
             
     assert type(k) == int and k > 0, "k doit être sous forme d'entier positif."
     
+    assert k<= len(characters_data_base), \
+        "k doit être plus petit que la longueur de la table."
+    
     # Pour ne pas modifier de variable globale :
     data_base_changed = characters_data_base.copy()
     for i in range(len(data_base_changed)):
@@ -183,13 +186,11 @@ def knn_print(profile : dict, neighbors : list, house : str) -> None:
 
     for i in range(len(neighbors)):
         print(f"\t - {neighbors[i]['Name']}, de la maison {neighbors[i]['House']}, qui "\
-              f"a pour caractéristiques : \nCourage : {neighbors[i]['Courage']} "\
-                  f"; Ambition : {neighbors[i]['Ambition']} ; Intelligence : "\
-                    f"{neighbors[i]['Intelligence']} ; Good : {neighbors[i]['Good']} "\
-                        f"et a une distance avec le personnage cible de : {neighbors[i]['Distance']}.")
+              f"a une distance avec le personnage cible de : {round(neighbors[i]['Distance'], 3)}.")
+            
     print(f"\nFinalement, ce personnage cible ira dans la maison {house}.\n") 
-    
-    
+
+
 # Importation de la table "Characters.csv" :
 with open("Characters.csv", mode='r', encoding='utf-8') as f:
     reader = DictReader(f, delimiter=';')
