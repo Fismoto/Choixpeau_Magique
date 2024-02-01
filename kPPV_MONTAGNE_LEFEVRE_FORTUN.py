@@ -228,22 +228,28 @@ avec comme clefs toutes les informations que l'on a sur ce personnage
 for profile in TESTS_PROFILES:
     house, k_n_neighbors = knn_house(poudlard_characters, profile, CARACTERISTICS, k=5)
     knn_print(profile, k_n_neighbors, house)
+
     
 response = input("\n \
-                 \n Voulez-vous entrez vous-même des caractéristiques ? (oui/non) : ")
+                 \n Voulez-vous entrez vous-même des caractéristiques ? \
+    (1 pour oui 2 pour non) : ")
 
-if response.lower() == "oui":
+while response == '1':
     try:
         k_client = int(input("Donner votre k : "))
         caracteristics_client = {}    
         for caracteristic in CARACTERISTICS:
             caracteristics_client[caracteristic] = int(input(f"\
-                    Valeur de la caractéristique {caracteristic} : "))
+                Valeur de la caractéristique {caracteristic} : "))
         house, k_n_neighbors = knn_house(poudlard_characters, caracteristics_client, CARACTERISTICS, k=k_client)
         knn_print(caracteristics_client, k_n_neighbors, house)
     except:
         print("Saisie incorrecte, désolé !!")
+    
+    response = input("\n \
+                     \n Voulez-vous à nouveau entrez vous-même des caractéristiques ? \
+                     (1 pour oui 2 pour non) : ")
 
-
-else:
-    print("Dommage, à une prochaîne fois !")
+print("Dommage, à une prochaîne fois !")
+    
+# Fin du programme
