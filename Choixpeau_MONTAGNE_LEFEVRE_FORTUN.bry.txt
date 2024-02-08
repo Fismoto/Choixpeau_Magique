@@ -5,7 +5,7 @@ Codé par : Octave FORTUN, Milo MONTAGNE, Pierrick LEFEVRE
 
 Projet NSI 3 "Choixpeau Magique", partie II
 
-IHM Web correspondant à la partie I
+IHM du Choixpeau Magique, utilise l'agorythme des KPPV codé précédemment.
 
 Licence : CC-BY-NC-SA
 
@@ -15,9 +15,18 @@ github : https://github.com/Fismoto/Choixpeau_Magique
 # Importation des modules :
 from csv import DictReader
 from math import sqrt
+from browser import document
 
 # Importation des questions :
-with open("Questions.csv", mode='r', coding="utf-8",) as f:
-	reader = DictReader(f, delimiter=';')
-	questions_tab = [{key : value.replace('\xa0', ' ') for key, \
-                       value in element.items()} for element in reader]
+with open("Quetions.csv", mode='r', encoding='utf-8') as f:
+    reader = DictReader(f, delimiter=';')
+    questions_tab = [{key : value for key, value in element.items()} \
+                           for element in reader]
+                           
+def answer_clicked(question, answer):
+    '''
+    '''
+    assert answer in {1, 2, 3}
+    
+    values = question[f"Answer {answer}"]
+    

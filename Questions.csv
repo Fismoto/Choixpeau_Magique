@@ -1,0 +1,6 @@
+Question;Answer1;Value1;Answer2;Value2;Answer3;Value3
+Tu es aiguilleur, un train arrive et ne peut pas s’arrêter. Tu le dirige vers :;;;;;;
+Que préférerais-tu entre ces trois situations :;Sauver des vies, à tes risques et périls;(+2, 0, 0, +1);Devenir riche, mais faire souffrir des gens;(0, +2, +1, - 1);Avoir un salaire correct, et pouvoir monter en grade;(0, +1, +1, 0)
+Tu as une après-midi de libre, tu préfères :;Travailler ton examen important qui est dans 6 mois;0, +2, +1, -1;Te divertir;(0, 0, -1, -1;Aller voir ta grand-mère mourante;(+1, -1, -1 , +2)
+Ton principal défaut est :;Egoïste;(0, +2, 0, -1);Perfectionniste;(0, 0, +2, 0;Tu n'anticipes souvent pas assez;(+1, 0, 0, 0)
+Tu as gagné une forte somme au loto.;Tu épargnes;(0, +1, +2, 0); Tu pars en voyage avec tes amis;(0, 0, -1, +2);Tu investis en bourse;(+1,+2,0,0)
