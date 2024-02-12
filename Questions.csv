@@ -1,11 +1,11 @@
-Question;Answer1;Value1;Answer2;Value2;Answer3;Value3
-Tu es aiguilleur, un train arrive et ne peut pas s’arrêter. Tu le dirige vers :;ta mamie souffrante (au moins ce sera la seule victime);(0, +1, +2, -1);un groupe de 3 enfants, avec 1 chance sur 2 qu'ils meurent (au moins ce seront les seules victimes);(+2, 0, +1, -1);tu ne touche pas à l'aiguillage, pour ne pas avoir les responsabilités (des gens vont sûrement mourir);(-1, 0, +3, 0)
-Que préférerais-tu entre ces trois situations :;Sauver des vies, à tes risques et périls;(+2, 0, -1, +1);Devenir riche, mais faire souffrir des mamies;(0, +2, +1, -1);Avoir un salaire correct, et pouvoir monter en grade;(0, +1, +1, 0)
-Tu as une après-midi de libre, tu préfères :;Travailler ton examen important qui est dans 6 mois;(0, +2, +1, -1);Te divertir;(0, +1, +1, 0);Aller voir ta mamie mourante;(+1, -1, -1 , +3)
-Ton principal défaut est :;tu préfères garder les choses pour toi;(0, +2, +1, -1);tu fais attention aux détails;(0, 0, +2, 0);Tu n'anticipes souvent pas assez tes visites chez mamie;(+3, -1, -1, +1)
-Tu as gagné une forte somme au loto.;Tu épargnes;(0, +1, +1, 0);tu pars en voyage avec ta mamie;(0, 0, -1, +3);Tu investis en bourse;(+1, +2, 0, -1)
-Tu es dans un avion qui va se crasher, tu as le seul parachute, tu :;le donne a mamie et tu saute;(+2, 0, -2, +2);tu saute, rien a faire;(0, +1, +2, -1);tu garde ton parachute, mais tu en cherche un pour la mamie;(+1, 0, +1, 0)
-Mamie fait tomber 50€ de son portefeuille :;tu lui rends;(0, 0, 0, +2);tu lui voles;(+1, +1, +1, -1);tu le donne à un pauvre;(+1, 0, 0, +1)
-Mamie se fait agresser dans la rue, que fais-tu ?;Tu voles à sa rescousse;(+2, 0, -1, +1);tu appelles les autorités;(0, 0, +1, +1); tu te barres en courant;(0, +1, +2, -1)
-Quel est ton roman préféré ?;Un roman de SF;(0, 0, +2, 0);Un roman sur un self-made-man;(+1, +2, 0, -1);Un roman d’aventure pour enfant offert par Mamie;(0, 0, -1, +3)
-Tu préfères exercer :;un métier où tu as des responsabilités;(0,+1,+1,0); un métier qui te rendras célèbres (Mamie sera fière de toi);(0, +2, 0, 0); un métier qui te passionnes, quel que soit le salaire;(+1, 0, 0, +1)
+Question;Answer 1;Value 1;Answer 2;Value 2;Answer 3;Value 3
+Tu es aiguilleur, un train arrive et ne peut pas s’arrêter. Tu le dirige vers :;ta mamie souffrante (au moins ce sera la seule victime);0, +1, +2, -1;un groupe de 3 enfants, avec 1 chance sur 2 qu'ils meurent (au moins ce seront les seules victimes);+2, 0, +1, -1;tu ne touche pas à l'aiguillage, pour ne pas avoir les responsabilités (des gens vont sûrement mourir);-1, 0, +3, 0
+Que préférerais-tu entre ces trois situations :;Sauver des vies, à tes risques et périls;+2, 0, -1, +1;Devenir riche, mais faire souffrir des mamies;0, +2, +1, -1;Avoir un salaire correct, et pouvoir monter en grade;0, +1, +1, 0
+Tu as une après-midi de libre, tu préfères :;Travailler ton examen important qui est dans 6 mois;0, +2, +1, -1;Te divertir;0, +1, +1, 0;Aller voir ta mamie mourante;+1, -1, -1 , +3
+Ton principal défaut est :;tu préfères garder les choses pour toi;0, +2, +1, -1;tu fais attention aux détails;0, 0, +2, 0;Tu n'anticipes souvent pas assez (tes visites chez mamie par ex.);+3, -1, -1, +1
+Tu as gagné une forte somme au loto.;Tu épargnes;0, +1, +1, 0;tu pars en voyage avec ta mamie;0, 0, -1, +3;Tu investis en bourse;+1, +2, 0, -1
+Tu es dans un avion qui va se crasher, tu as le seul parachute, tu :;le donne a mamie et tu saute;+2, 0, -2, +2;tu saute, rien a faire;0, +1, +2, -1;tu garde ton parachute, mais tu en cherche un pour la mamie;+1, 0, +1, 0
+Mamie fait tomber 50€ de son portefeuille :;tu lui rends;0, 0, 0, +2;tu lui voles;+1, +1, +1, -1;tu le donne à un pauvre;+1, 0, 0, +1
+Mamie se fait agresser dans la rue, que fais-tu ?;Tu voles à sa rescousse;+2, 0, -1, +1;tu appelles les autorités;0, 0, +1, +1; tu te barres en courant;0, +1, +2, -1
+Quel est ton roman préféré ?;Un roman de SF;0, 0, +2, 0;Un roman sur un self-made-man;+1, +2, 0, -1;Un roman d’aventure pour enfant offert par Mamie;0, 0, -1, +3
+Tu préfères exercer :;un métier où tu as des responsabilités;0, +1, +1, S0; un métier qui te rendras célèbres (Mamie sera fière de toi);0, +2, 0, 0; un métier qui te passionnes, quel que soit le salaire;+1, 0, 0, +1
