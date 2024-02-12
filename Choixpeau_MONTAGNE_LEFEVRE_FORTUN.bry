@@ -1,0 +1,57 @@
+# coding: utf_8
+
+'''
+Codé par : Octave FORTUN, Milo MONTAGNE, Pierrick LEFEVRE
+
+Projet NSI 3 "Choixpeau Magique", partie II
+
+IHM du Choixpeau Magique, utilise l'agorythme des KPPV codé précédemment.
+
+Licence : CC-BY-NC-SA
+
+github : https://github.com/Fismoto/Choixpeau_Magique
+'''
+
+CARACTERISTICS = ('Courage', 'Ambition', 'Intelligence', 'Good')
+
+CLIENT_PROFILE = {}
+for caracteristic in CARACTERISTICS:
+    CLIENT_PROFILE[caracteristic] = 0
+
+
+# Importation des modules :
+from csv import DictReader
+from math import sqrt
+from browser import document, html
+
+# Importation des questions :
+with open("Quetions.csv", mode='r', encoding='utf-8') as f:
+    reader = DictReader(f, delimiter=';')
+    questions_tab = [{key : value for key, value in element.items()} \
+                           for element in reader]
+                           
+def answer_clicked(question, answer, caracteristics=CARACTERISTICS):
+    '''
+    '''
+    assert answer in {1, 2, 3}
+    
+    values = tuple(question[f"Answer {answer}"])
+    dict_values = {}
+    
+    for i in range(4):
+        dict_values[caracteristics[i]] = values[i]
+    
+    for caracteristic in dict_values:
+        value = dict_values[caracteristic][0]
+        if value[0] == '+':
+            CLIENT_PROFILE[caracteristic] += int(value[1])
+        elif value[0] == '-':
+            CLIENT_PROFILE[caracteristic] -= int(value[1])
+
+i = 0
+
+document <= html.H1("", id='printed_question')
+document <= html.BUTTON("", id='R1')
+document <= html.BUTTON("", id='R2')
+document <= html.BUTTON("", id='R3')
+
