@@ -16,7 +16,6 @@ github : https://github.com/Fismoto/Choixpeau_Magique
 '''
 
 # Importation des modules :
-from csv import DictReader
 from math import sqrt
 
 # Constantes :
@@ -29,6 +28,31 @@ TESTS_PROFILES = ({'Courage': 9, 'Ambition': 2, 'Intelligence': 8, 'Good': 9},\
                   {'Courage': 3, 'Ambition': 4, 'Intelligence': 8, 'Good': 8})
     
 # Définition des fonctions :
+def csv_dict_import(file_name: str) -> list:
+    '''
+    Importation d'une table à partir d'un fichier csv (utf-8)
+    Entrée :
+        - file_name, chaîne de cractère, chemin du fichier csv
+    Sortie :
+        - table, liste de dictionnaires
+    '''
+    # Précondition :
+    assert type(file_name) == str, "Le nom du fichier doit être un str"
+
+    table = []
+    with open(file_name, mode='r', encoding='utf-8') as f:
+        lines = f.readlines()
+        key_line = lines[0].strip()
+        keys = key_line.split(";")
+        for line in lines[1:]:
+            line = line.strip()
+            values = line.split(';')
+            dico = {}
+            for i in range(len(keys)):
+                dico[keys[i]] = values[i]
+            table.append(dico)
+        return table
+
 def euclidian_distance(character1: dict, character2: dict, caracteristics=CARACTERISTICS) -> float:
     '''
     Cette fonction calcule la distance entre deux personnages, en utilisant 
@@ -196,17 +220,10 @@ def knn_print(profile : dict, neighbors : list, house : str) -> None:
 
 
 # Importation de la table "Characters.csv" :
-with open("Characters.csv", mode='r', encoding='utf-8') as f:
-    reader = DictReader(f, delimiter=';')
-    characters_tab = [{key : value.replace('\xa0', ' ') for key, \
-                       value in element.items()} for element in reader]
-
+characters_tab = csv_dict_import("Characters.csv")
 
 # Importation de la table "Caracteristiques_des_persos.csv" :
-with open("Caracteristiques_des_persos.csv", mode='r', encoding='utf-8') as f:
-    reader = DictReader(f, delimiter=';')
-    characteristics_tab = [{key : value for key, value in element.items()} \
-                           for element in reader]
+characteristics_tab = csv_dict_import("Caracteristiques_des_persos.csv")
     
     
 # Jointure de ces deux tables dans la table poudlard_characters :
@@ -233,7 +250,8 @@ avec comme clefs toutes les informations que l'on a sur ce personnage
 for profile in TESTS_PROFILES:
     house, k_n_neighbors = knn_house(poudlard_characters, profile, CARACTERISTICS, k=5)
     knn_print(profile, k_n_neighbors, house)
-    
+
+'''
 response = input("\n \
                  \n Voulez-vous entrez vous-même des caractéristiques ? \
     (1 pour oui 2 pour non) : ")
@@ -257,3 +275,4 @@ while response == '1':
 print("Dommage, à une prochaîne fois !")
     
 # Fin du programme
+'''

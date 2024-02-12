@@ -11,47 +11,49 @@ Licence : CC-BY-NC-SA
 
 github : https://github.com/Fismoto/Choixpeau_Magique
 '''
-
-CARACTERISTICS = ('Courage', 'Ambition', 'Intelligence', 'Good')
+# Importation des modules :
+from math import sqrt
+from browser import document, html
+from kPPV_MONTAGNE_LEFEVRE_FORTUN import CARACTERISTICS, csv_dict_import, \
+    euclidian_distance, knn_house, knn_print, poudlard_characters
 
 CLIENT_PROFILE = {}
 for caracteristic in CARACTERISTICS:
     CLIENT_PROFILE[caracteristic] = 0
 
+# Définition des fonctions :
+def space():
+    '''
+    Crée deux retours à la ligne sur l'affichage web.
+    '''
+    for i in range(2):
+        document <= html.BR()
 
-# Importation des modules :
-from csv import DictReader
-from math import sqrt
-from browser import document, html
+def button_1_clicked(ev):
+    '''
+    Ce qu'il se passe quand on clique sur le premier bouton.
+    '''
+    document['bouton_1'].textContent = "Cliqué"                
+                
+def button_2_clicked(ev):
+    document['bouton_2'].textContent = "Cliqué"
+                
+def button_3_clicked(ev):
+    document['bouton_3'].textContent = "Cliqué"
 
 # Importation des questions :
-with open("Quetions.csv", mode='r', encoding='utf-8') as f:
-    reader = DictReader(f, delimiter=';')
-    questions_tab = [{key : value for key, value in element.items()} \
-                           for element in reader]
-                           
-def answer_clicked(question, answer, caracteristics=CARACTERISTICS):
-    '''
-    '''
-    assert answer in {1, 2, 3}
-    
-    values = tuple(question[f"Answer {answer}"])
-    dict_values = {}
-    
-    for i in range(4):
-        dict_values[caracteristics[i]] = values[i]
-    
-    for caracteristic in dict_values:
-        value = dict_values[caracteristic][0]
-        if value[0] == '+':
-            CLIENT_PROFILE[caracteristic] += int(value[1])
-        elif value[0] == '-':
-            CLIENT_PROFILE[caracteristic] -= int(value[1])
+questions_tab = csv_dict_import("Caracteristiques_des_persos.csv")
 
-i = 0
+# Création des éléments HTML :
+document <= html.H1("Question :", id='printed_question')             
+document <= html.BUTTON("Bouton_1", id="bouton_1")
+space()
+document <= html.BUTTON("Bouton_2", id="bouton_2")
+space()
+document <= html.BUTTON("Bouton_3", id="bouton_3")
 
-document <= html.H1("", id='printed_question')
-document <= html.BUTTON("", id='R1')
-document <= html.BUTTON("", id='R2')
-document <= html.BUTTON("", id='R3')
+# .bind des boutons :
+document['bouton_1'].bind("click", button_1_clicked)
+document['bouton_2'].bind("click", button_2_clicked)
+document['bouton_3'].bind("click", button_3_clicked)
 

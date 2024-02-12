@@ -12,16 +12,7 @@
             </script>
         </head>
         <body onload="brython()">
-            <p>test boutons :</p>
-            <script type="text/python">
-                from browser import document, html
-                document <= "test"
-                document <= html.P("test", id="paragraphe")
-                document <= html.BUTTON("Bouton 1", id="reponse 1")
-                document <= html.BUTTON("Bouton 2", id="reponse 2", class='bouton_reponse')
-                document <= html.BUTTON("Bouton 3", id="reponse 3", class='bouton_reponse')
-
-                document["reponse 1"].bind("click", button_1_clicked)
-            </script>
+            <script type="text/python" src="Choixpeau_MONTAGNE_LEFEVRE_FORTUN.bry">
+            </script> 
         </body>
     </html>
