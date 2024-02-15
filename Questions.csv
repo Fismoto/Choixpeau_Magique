@@ -8,4 +8,4 @@ Tu es dans un avion qui va se crasher, tu as le seul parachute, tu :;le donne a 
 Mamie fait tomber 50€ de son portefeuille :;tu lui rends;0, 0, 0, +2;tu lui voles;+1, +1, +1, -1;tu le donne à un pauvre;+1, 0, 0, +1
 Mamie se fait agresser dans la rue, que fais-tu ?;Tu voles à sa rescousse;+2, 0, -1, +1;tu appelles les autorités;0, 0, +1, +1; tu te barres en courant;0, +1, +2, -1
 Quel est ton roman préféré ?;Un roman de SF;0, 0, +2, 0;Un roman sur un self-made-man;+1, +2, 0, -1;Un roman d’aventure pour enfant offert par Mamie;0, 0, -1, +3
-Tu préfères exercer :;un métier où tu as des responsabilités;0, +1, +1, S0; un métier qui te rendras célèbres (Mamie sera fière de toi);0, +2, 0, 0; un métier qui te passionnes, quel que soit le salaire;+1, 0, 0, +1
+Tu préfères exercer :;un métier où tu as des responsabilités;0, +1, +1, 0; un métier qui te rendras célèbres (Mamie sera fière de toi);0, +2, 0, 0; un métier qui te passionnes, quel que soit le salaire;+1, 0, 0, +1

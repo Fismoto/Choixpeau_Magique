@@ -17,11 +17,17 @@ from browser import document, html
 from kPPV_MONTAGNE_LEFEVRE_FORTUN import CARACTERISTICS, csv_dict_import, \
     euclidian_distance, knn_house, knn_print, poudlard_characters
 
+# Variables globales :
 CLIENT_PROFILE = {}
 for caracteristic in CARACTERISTICS:
     CLIENT_PROFILE[caracteristic] = 0
 
-# Définition des fonctions :
+INDEX_QUESTION = 0
+
+ANY_BUTTON_CLICKED = False
+
+
+# Définition des fonctions (hors utilisation des boutons) :
 def tuple_values(values : str):
     '''
     Transforme un str en tuple (pour l'import des questions)
@@ -53,6 +59,42 @@ def space(nb_lines: int):
     for i in range(nb_lines):
         document <= html.BR()
 
+def final_print(profile):
+    document <= "Il faudrait tout effacer avant !!"
+
+# Importation des questions :
+questions_tab = csv_dict_import("Questions.csv")
+for i in range(len(questions_tab)):
+    for key in questions_tab[i]:
+        if key in {"Value 1", "Value 2", "Value 3"}:
+            questions_tab[i][key] = tuple_values(questions_tab[i][key])
+ 
+# Création des éléments HTML :
+document <= html.H1(questions_tab[INDEX_QUESTION]['Question'], id='printed_question')             
+document <= html.BUTTON(questions_tab[INDEX_QUESTION]['Answer 1'], id="button_1")
+space(2)
+document <= html.BUTTON(questions_tab[INDEX_QUESTION]['Answer 2'], id="button_2")
+space(2)
+document <= html.BUTTON(questions_tab[INDEX_QUESTION]['Answer 3'], id="button_3")
+
+# Définition des fonctions liées auc clics des boutons :
+def update_all(index_question: int, questions):
+    '''
+    Met à jour l'affichage de la question et des boutons
+    
+    Entrées :
+        - index_question, entier, \
+        indice de la question à laquelle l'utilisateur est rendu
+    
+    Pas de sorties, procédure d'affichage.
+    '''
+    if index_question <= len(questions):
+        document['printed_question'].textContent = questions[index_question]['Question']
+        for nb in range(1, 4):
+            document[f'button_{nb}'].textContent = questions[index_question][f'Answer {nb}']
+    else:
+        final_print(CLIENT_PROFILE)
+
 def button_1_clicked(ev):
     '''
     Ce qu'il se passe quand on clique sur le bouton 1.
@@ -62,44 +104,37 @@ def button_1_clicked(ev):
     Sorties :
         - pas de sorties
     '''
-    document['bouton_1'].textContent = "Cliqué"                
-                
+    global INDEX_QUESTION
+    INDEX_QUESTION += 1
+    update_all(INDEX_QUESTION, questions_tab)
+
 def button_2_clicked(ev):
     '''
     Idem pour le bouton 2.
     '''
-    document['bouton_2'].textContent = "Cliqué"
+    global INDEX_QUESTION
+    INDEX_QUESTION += 1
+    update_all(INDEX_QUESTION, questions_tab)
                 
 def button_3_clicked(ev):
     '''
     Idem pour le bouton 3.
     '''
-    document['bouton_3'].textContent = "Cliqué"
+    global INDEX_QUESTION
+    INDEX_QUESTION += 1
+    update_all(INDEX_QUESTION, questions_tab)
 
-# Importation des questions :
-questions_tab = csv_dict_import("Questions.csv")
-for i in range(len(questions_tab)):
-    for key in questions_tab[i]:
-        if key in {"Value 1", "Value 2", "Value 3"}:
-            questions_tab[i][key] = tuple_values(questions_tab[i][key])
-
-# Création des éléments HTML :
-document <= html.H1("Question :", id='printed_question')             
-document <= html.BUTTON("Bouton_1", id="bouton_1")
-space(2)
-document <= html.BUTTON("Bouton_2", id="bouton_2")
-space(2)
-document <= html.BUTTON("Bouton_3", id="bouton_3")
 
 # .bind des boutons :
-document['bouton_1'].bind("click", button_1_clicked)
-document['bouton_2'].bind("click", button_2_clicked)
-document['bouton_3'].bind("click", button_3_clicked)
+document['button_1'].bind("click", button_1_clicked)
+document['button_2'].bind("click", button_2_clicked)
+document['button_3'].bind("click", button_3_clicked)
+
 
 # Pour nos tests :
 space(2)
 document <= html.H4("Testez la questions / réponse à afficher :", id="test_questions")
 for question in questions_tab:
     for key in question:
-        document <= html.P(question[key])
+        document <= html.P(str(question[key]))
     space(2)
