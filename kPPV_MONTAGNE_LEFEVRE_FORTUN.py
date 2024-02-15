@@ -185,7 +185,7 @@ def knn_house(characters_data_base: list, new_character: dict, caracteristics: t
                 return (neighbor['House'], k_nearest_neighbors)
     # On ne gère pas les cas de triple égalité
 
-def knn_print(profile : dict, neighbors : list, house : str) -> None:
+def knn_str(profile : dict, neighbors : list, house : str) -> None:
     '''   
     Cette procédure affiche les caractéristiques du nouveau personnage,
     ses k plus proches voisins 
@@ -200,23 +200,25 @@ def knn_print(profile : dict, neighbors : list, house : str) -> None:
      
     assert type(neighbors) == list, \
         "La base de donnée être une liste de dictionnaires."
- 
+    '''
     for neighbor in neighbors:        
         assert type(neighbor) == dict, \
             "La base de donnée doit être une liste de dictionnaires."               
-        for caracteristic in profile:
+        for caracteristic in caracteristics:
             assert caracteristic in neighbor, \
                 "Chaque personnage/dictionnaire doit contenir comme clefs \
                     toutes les caractéristiques avec lesquelles \
                         on veut calculer la distance."
-    
-    print(f"\nLe personnage ayant les caractéristiques : {profile} a pour plus proches voisins : \n") 
+    '''
+    assessment = f"\nLe personnage ayant les caractéristiques : {profile} a pour plus proches voisins : \n"
 
     for i in range(len(neighbors)):
-        print(f"\t - {neighbors[i]['Name']}, de la maison {neighbors[i]['House']}, qui "\
-              f"a une distance avec le personnage cible de : {round(neighbors[i]['Distance'], 3)}.")
+        assessment += f"\t - {neighbors[i]['Name']}, de la maison {neighbors[i]['House']}, qui "\
+              f"a une distance avec le personnage cible de : {round(neighbors[i]['Distance'], 3)}."
             
-    print(f"\nFinalement, ce personnage cible ira dans la maison {house}.\n") 
+    assessment += f"\nFinalement, ce personnage cible ira dans la maison {house}.\n"
+
+    return assessment
 
 
 # Importation de la table "Characters.csv" :
@@ -249,7 +251,7 @@ avec comme clefs toutes les informations que l'on a sur ce personnage
 
 for profile in TESTS_PROFILES:
     house, k_n_neighbors = knn_house(poudlard_characters, profile, CARACTERISTICS, k=5)
-    knn_print(profile, k_n_neighbors, house)
+    knn_str(profile, k_n_neighbors, house)
 
 '''
 response = input("\n \

@@ -15,7 +15,7 @@ github : https://github.com/Fismoto/Choixpeau_Magique
 from math import sqrt
 from browser import document, html
 from kPPV_MONTAGNE_LEFEVRE_FORTUN import CARACTERISTICS, csv_dict_import, \
-    euclidian_distance, knn_house, knn_print, poudlard_characters
+    euclidian_distance, knn_house, knn_str, poudlard_characters
 
 # Variables globales :
 CLIENT_PROFILE = {}
@@ -24,7 +24,9 @@ for caracteristic in CARACTERISTICS:
 
 INDEX_QUESTION = 0
 
-ANY_BUTTON_CLICKED = False
+ALL_ID = ['printed_question', 'button_1', 'button_2', 'button_3']
+
+NB_SPACE = 0
 
 
 # Définition des fonctions (hors utilisation des boutons) :
@@ -56,26 +58,36 @@ def space(nb_lines: int):
     assert type(nb_lines) == int and nb_lines >= 0, \
         "On saute un nombre entier positif de lignes"
 
+    global NB_SPACE
+
     for i in range(nb_lines):
-        document <= html.BR()
+        NB_SPACE += 1
+        space_id = f"space_{NB_SPACE}"
+        document <= html.BR(id=space_id)
+        # Pour pouvoir supprimmer toutes les balises <br> à la fin : (voir fonction final_print())
+        ALL_ID.append(space_id)
 
 def final_print(profile):
-    document <= "Il faudrait tout effacer avant !!"
+    '''
+    Affichage final de la page (quand l'utilisateur clique sur le dernier bouton).
+    Efface le contenu de la page et affiche la maison du personnage, en utilisant les KPPV
 
-# Importation des questions :
-questions_tab = csv_dict_import("Questions.csv")
-for i in range(len(questions_tab)):
-    for key in questions_tab[i]:
-        if key in {"Value 1", "Value 2", "Value 3"}:
-            questions_tab[i][key] = tuple_values(questions_tab[i][key])
- 
-# Création des éléments HTML :
-document <= html.H1(questions_tab[INDEX_QUESTION]['Question'], id='printed_question')             
-document <= html.BUTTON(questions_tab[INDEX_QUESTION]['Answer 1'], id="button_1")
-space(2)
-document <= html.BUTTON(questions_tab[INDEX_QUESTION]['Answer 2'], id="button_2")
-space(2)
-document <= html.BUTTON(questions_tab[INDEX_QUESTION]['Answer 3'], id="button_3")
+    Entrées :
+        - profile, dictionnaire contenant les valeurs des caractéristiques de l'utilisateur
+
+    Pas de sortie, procédure d'affichage
+    '''
+    # Préconditions :
+    assert type(profile) == dict, \
+        "Le nouveau personnage doit être sous forme de dictionnaire."
+
+    for id in ALL_ID:
+        del document[id]
+
+    document['test'] = html.H2(str(CLIENT_PROFILE))
+
+    house, k_n_neighbors = knn_house(poudlard_characters, profile, CARACTERISTICS, k=5)
+    document <= html.P(knn_str(profile, k_n_neighbors, house))
 
 # Définition des fonctions liées auc clics des boutons :
 def update_all(index_question: int, questions):
@@ -88,49 +100,64 @@ def update_all(index_question: int, questions):
     
     Pas de sorties, procédure d'affichage.
     '''
-    if index_question <= len(questions):
+    if index_question < len(questions):
+        if index_question == 1:
+            del document['first_sentence']
         document['printed_question'].textContent = questions[index_question]['Question']
         for nb in range(1, 4):
             document[f'button_{nb}'].textContent = questions[index_question][f'Answer {nb}']
     else:
         final_print(CLIENT_PROFILE)
 
-def button_1_clicked(ev):
+def button_clicked(ev):
     '''
-    Ce qu'il se passe quand on clique sur le bouton 1.
-
+    Changement de l'affichage et modification du profil lorsqu'on clique sur un bouton.
+    On récupère l'id du bouton qui est cliqué avec l'objet pris en paramêtre ev.
+    
     Entrées :
-        - ev, l'évènement mis dans le .bind() du bouton
+        - ev, paramètre par défaut et obligatoire pour les .bind()
     Sorties :
-        - pas de sorties
+        - Pas de sortie, procédure d'affichage.
     '''
     global INDEX_QUESTION
+
+    # Modification du profil client :
+    nb_button_clicked = ev.target.id[-1:]
+    added_values = questions_tab[INDEX_QUESTION][f'Value {nb_button_clicked}']
+
+    # Pour les tests : document <= str(added_values)
+
+    i = 0
+    for caracteristic in CLIENT_PROFILE:
+        if CLIENT_PROFILE[caracteristic] + added_values[i] > 0 and CLIENT_PROFILE[caracteristic] + added_values[i] < 9:
+            CLIENT_PROFILE[caracteristic] += added_values[i]
+        i += 1
+
+    # Changement de l'affichage :
     INDEX_QUESTION += 1
     update_all(INDEX_QUESTION, questions_tab)
 
-def button_2_clicked(ev):
-    '''
-    Idem pour le bouton 2.
-    '''
-    global INDEX_QUESTION
-    INDEX_QUESTION += 1
-    update_all(INDEX_QUESTION, questions_tab)
-                
-def button_3_clicked(ev):
-    '''
-    Idem pour le bouton 3.
-    '''
-    global INDEX_QUESTION
-    INDEX_QUESTION += 1
-    update_all(INDEX_QUESTION, questions_tab)
+# Importation des questions :
+questions_tab = csv_dict_import("Questions.csv")
+for i in range(len(questions_tab)):
+    for key in questions_tab[i]:
+        if key in {"Value 1", "Value 2", "Value 3"}:
+            questions_tab[i][key] = tuple_values(questions_tab[i][key])
 
+# Création des éléments HTML :
+first_sentence = "Salut, jeune bipède ! Bienvenue dans le questionnaire du choixpeau magique !  Première question :"
+document <= html.H1(first_sentence, id='first_sentence')
+document <= html.H2(questions_tab[INDEX_QUESTION]['Question'], id='printed_question')
 
+for i in range(1, 4):            
+    document <= html.BUTTON(questions_tab[INDEX_QUESTION][f'Answer {i}'], id=f'button_{i}')
+    space(2)
+    
 # .bind des boutons :
-document['button_1'].bind("click", button_1_clicked)
-document['button_2'].bind("click", button_2_clicked)
-document['button_3'].bind("click", button_3_clicked)
+for nb in range(1, 4):
+    document[f'button_{nb}'].bind("click", button_clicked)
 
-
+'''
 # Pour nos tests :
 space(2)
 document <= html.H4("Testez la questions / réponse à afficher :", id="test_questions")
@@ -138,3 +165,4 @@ for question in questions_tab:
     for key in question:
         document <= html.P(str(question[key]))
     space(2)
+'''
