@@ -40,7 +40,7 @@ def tuple_values(values : str):
     '''
     # Préconditions:
     assert type(values) == str, "L'entrée de la fonction doit être un str."
-    list_values =[]
+    list_values = []
     for number in values.split(', '):
         list_values.append(int(number))
     return tuple(list_values)
@@ -110,9 +110,9 @@ def create_all(questions: list):
     for i in range(1, 4):            
         document <= html.BUTTON(questions[INDEX_QUESTION][f'Answer {i}'], id=f'button_{i}')
         space(2)
-        ALL_ID.append('button_{i}')
+        ALL_ID.append(f'button_{i}')
 
-def update_all(index_question: int, questions):
+def update_all(index_question: int, questions: int):
     '''
     Met à jour l'affichage de la question et des boutons
     
@@ -160,6 +160,22 @@ def button_clicked(ev):
     INDEX_QUESTION += 1
     update_all(INDEX_QUESTION, questions_tab)
 
+def bind_buttons(buttons: list, function=button_clicked, event='click'):
+    '''
+    .bind des 3 boutons réponses, en une fonction.
+
+    Entrées : 
+        - event : chaîne de caractères, 
+        évènement qui appelle la fonction function (prise en paramètre)
+        - function : fonction appellée lors de l'évènement event (pris en paramètre)
+    '''
+    # Préconditions:
+    assert type(event) == str, \
+        "L'évènement doit être une chaîne de caractères (ex : 'click')"
+
+    for nb in range(1, 4):
+        document[f'button_{nb}'].bind(event, function)
+
 # Importation des questions :
 questions_tab = csv_dict_import("Questions.csv")
 for i in range(len(questions_tab)):
@@ -167,13 +183,12 @@ for i in range(len(questions_tab)):
         if key in {"Value 1", "Value 2", "Value 3"}:
             questions_tab[i][key] = tuple_values(questions_tab[i][key])
 
-# Création des éléments HTML :
-create_all(questions_tab)
+# Création des éléments HTML et .bind des boutons :
+create_all(questions=questions_tab)
 
-    
-# .bind des boutons :
-for nb in range(1, 4):
-    document[f'button_{nb}'].bind("click", button_clicked)
+response_buttons = [f"button_{i}" for i in range(1, 4)]
+bind_buttons(response_buttons, function=button_clicked, event='click')
+
 
 '''
 # Pour nos tests :
