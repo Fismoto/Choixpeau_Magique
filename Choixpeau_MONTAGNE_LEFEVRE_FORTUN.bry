@@ -24,7 +24,7 @@ for caracteristic in CARACTERISTICS:
 
 INDEX_QUESTION = 0
 
-ALL_ID = ['printed_question', 'button_1', 'button_2', 'button_3']
+ALL_ID = []
 
 NB_SPACE = 0
 
@@ -84,12 +84,34 @@ def final_print(profile):
     for id in ALL_ID:
         del document[id]
 
-    document['test'] = html.H2(str(CLIENT_PROFILE))
-
     house, k_n_neighbors = knn_house(poudlard_characters, profile, CARACTERISTICS, k=5)
     document <= html.P(knn_str(profile, k_n_neighbors, house))
 
-# Définition des fonctions liées auc clics des boutons :
+# Définition des fonctions liées aux boutons :
+def create_all(questions: list):
+    '''
+    Crée tous les éléments HTML du questionnaire.
+
+    Entrées :
+        - questions, liste de dictionnaires 
+        où chaque dictionnaire correspond à une question 
+        et est de la forme : {'Question': 'question', \
+                            'Answer 1': 'réponse', 'Value 1': 'tuple_de_valeurs', \
+                            'Answer 2': 'réponse', 'Value 2': 'tuple_de_valeurs', \
+                            'Answer 2': 'réponse', 'Value 2': 'tuple_de_valeurs'}
+    
+    Pas de sortie, procédure d'affichage.
+    '''
+    first_sentence = "Salut, jeune bipède ! Bienvenue dans le questionnaire du choixpeau magique !  Première question :"
+    document <= html.H1(first_sentence, id='first_sentence')
+    document <= html.H2(questions[INDEX_QUESTION]['Question'], id='printed_question')
+    ALL_ID.append('first_sentence')
+    ALL_ID.append('printed_question')
+    for i in range(1, 4):            
+        document <= html.BUTTON(questions[INDEX_QUESTION][f'Answer {i}'], id=f'button_{i}')
+        space(2)
+        ALL_ID.append('button_{i}')
+
 def update_all(index_question: int, questions):
     '''
     Met à jour l'affichage de la question et des boutons
@@ -103,6 +125,7 @@ def update_all(index_question: int, questions):
     if index_question < len(questions):
         if index_question == 1:
             del document['first_sentence']
+            del ALL_ID[ALL_ID.index('first_sentence')]
         document['printed_question'].textContent = questions[index_question]['Question']
         for nb in range(1, 4):
             document[f'button_{nb}'].textContent = questions[index_question][f'Answer {nb}']
@@ -145,13 +168,8 @@ for i in range(len(questions_tab)):
             questions_tab[i][key] = tuple_values(questions_tab[i][key])
 
 # Création des éléments HTML :
-first_sentence = "Salut, jeune bipède ! Bienvenue dans le questionnaire du choixpeau magique !  Première question :"
-document <= html.H1(first_sentence, id='first_sentence')
-document <= html.H2(questions_tab[INDEX_QUESTION]['Question'], id='printed_question')
+create_all(questions_tab)
 
-for i in range(1, 4):            
-    document <= html.BUTTON(questions_tab[INDEX_QUESTION][f'Answer {i}'], id=f'button_{i}')
-    space(2)
     
 # .bind des boutons :
 for nb in range(1, 4):
