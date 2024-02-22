@@ -159,6 +159,7 @@ def create_quizz(questions: list, function_called) -> None:
 
     bind_buttons(response_buttons, function=function_called, event='click')
 
+    ad_elt(text=f"1/{len(questions)}", id_elt='counter', html_tag=html.P)
 
 def tuple_values(values : str) -> tuple:
     '''
@@ -216,6 +217,8 @@ def update_quizz(questions: int, characters_data_base: int, k=K) -> None:
         for nb in range(1, 4):
             document[f'button_{nb}'].textContent = questions[INDEX_QUESTION][f'Answer {nb}']
 
+        document['counter'].textContent = str(INDEX_QUESTION + 1) + "/" + str(len(questions))
+
     else: # L'utilisateur a déjà répondu à toutes les questions
         final_print(CLIENT_PROFILE, characters_data_base, k_client=k)
 
@@ -266,10 +269,11 @@ def page_beginning() -> None:
 
     Pas d'entrée ni sortie, procédure d'affichage.
     '''
-    first_sentence = "Salut, jeune bipède, aurais-tu quelques minutes à m'accorder ? \n\
-                        Je suis le choixpeau magique, répond à mes questions et tu connaitras ta maison !"
-    
-    ad_elt(text=first_sentence, id_elt='first_sentence', html_tag=html.H1)
+    first_sentences = ("Salut, jeune bipède, aurais-tu quelques minutes à m'accorder ?", \
+        "Je suis le choixpeau magique, répond à mes questions et tu connaitras ta maison !")    
+
+    for i in range(len(first_sentences)):
+        ad_elt(text=first_sentences[i], id_elt=f'sentence_{i + 1}', html_tag=html.H1)
 
     ad_elt(text="C'est parti !", id_elt='first_button', html_tag=html.BUTTON)
     document['first_button'].bind("click", launch_quizz)
