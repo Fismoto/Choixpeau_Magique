@@ -87,7 +87,7 @@ def final_print(profile: dict, characters_data_base: list, k_client=K) -> None:
     house, k_n_neighbors = knn_house(characters_data_base, profile, CARACTERISTICS, k=k_client)
 
     congrat = "Bravo, vous avez répondu à toutes les questions !"
-    your_house_is = "Votre maison est ..."
+    your_house_is = "Et votre maison est ..."
     for elt in (congrat, your_house_is, house):
         ad_elt(text=elt, id_elt='test', html_tag=html.H3)
 
