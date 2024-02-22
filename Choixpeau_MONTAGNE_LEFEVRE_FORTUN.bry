@@ -28,22 +28,48 @@ ALL_ID = []
 
 NB_SPACE = 0
 
+K = 5
+
+CHARACTERS = poudlard_characters
+
 
 # Définition des fonctions (hors utilisation des boutons) :
-def tuple_values(values : str):
+def delete_all():
     '''
-    Transforme un str en tuple (pour l'import des questions)
+    Supprimme tous les éléments HTML de la page, et les supprimme de la liste ALL_ID.
+    Pas d'entrée ni sortie (procédure).
+    '''
+    for id in ALL_ID:
+        del document[id]
+
+    ALL_ID.clear()
+
+def final_print(profile: dict, characters_data_base: list, k_client=K):
+    '''
+    Affichage final de la page (quand l'utilisateur clique sur le dernier bouton).
+    Efface le contenu de la page et affiche la maison du personnage, en utilisant les KPPV
+
     Entrées :
-        - values, str de la forme "0, -1, +2, +1"
-    Sorties :
-        - tuple de la forme (0, -1, 2, 1)
+        - profile : dictionnaire contenant les valeurs des caractéristiques de l'utilisateur
+        - characters_data_base : table, liste de dictionnaires où chaque dictionnaire correspond à un personnage
+        - k_client : entier, valeur par défault : la constante K
+
+    Pas de sortie, procédure d'affichage
     '''
-    # Préconditions:
-    assert type(values) == str, "L'entrée de la fonction doit être un str."
-    list_values = []
-    for number in values.split(', '):
-        list_values.append(int(number))
-    return tuple(list_values)
+    # Préconditions :
+    assert type(profile) == dict, \
+        "Le nouveau personnage doit être sous forme de dictionnaire."
+
+    assert type(characters_data_base) == list, \
+        "La base de donnée des personnages doit être une liste de dictionnaires."
+
+    assert type(k_client) == int and k_client > 0, \
+        "Le k doit être un entier positif." 
+
+    delete_all()
+
+    house, k_n_neighbors = knn_house(characters_data_base, profile, CARACTERISTICS, k=k_client)
+    document <= html.P(knn_str(profile, k_n_neighbors, house))
 
 def space(nb_lines: int):
     '''
@@ -67,28 +93,28 @@ def space(nb_lines: int):
         # Pour pouvoir supprimmer toutes les balises <br> à la fin : (voir fonction final_print())
         ALL_ID.append(space_id)
 
-def final_print(profile):
-    '''
-    Affichage final de la page (quand l'utilisateur clique sur le dernier bouton).
-    Efface le contenu de la page et affiche la maison du personnage, en utilisant les KPPV
-
-    Entrées :
-        - profile, dictionnaire contenant les valeurs des caractéristiques de l'utilisateur
-
-    Pas de sortie, procédure d'affichage
-    '''
-    # Préconditions :
-    assert type(profile) == dict, \
-        "Le nouveau personnage doit être sous forme de dictionnaire."
-
-    for id in ALL_ID:
-        del document[id]
-
-    house, k_n_neighbors = knn_house(poudlard_characters, profile, CARACTERISTICS, k=5)
-    document <= html.P(knn_str(profile, k_n_neighbors, house))
 
 # Définition des fonctions liées aux boutons :
-def create_all(questions: list):
+def bind_buttons(buttons: list, function, event='click'):
+    '''
+    .bind() des 3 boutons réponses, en une fonction.
+
+    Entrées : 
+        - event : chaîne de caractères, 
+        évènement qui appelle la fonction function (prise en paramètre)
+        - function : fonction appellée lors de l'évènement event (pris en paramètre)
+    '''
+    # Préconditions:
+    assert type(buttons) == list or type(buttons) == tuple, \
+        "Les boutons à .bind() doivent être entrés sous forme de liste ou de tuple."
+    assert type(event) == str, \
+        "L'évènement doit être une chaîne de caractères (ex : 'click')"
+
+    for nb in range(1, 4):
+        document[f'button_{nb}'].bind(event, function)
+
+
+def create_questions(questions: list, function_called):
     '''
     Crée tous les éléments HTML du questionnaire.
 
@@ -102,17 +128,41 @@ def create_all(questions: list):
     
     Pas de sortie, procédure d'affichage.
     '''
-    first_sentence = "Salut, jeune bipède ! Bienvenue dans le questionnaire du choixpeau magique !  Première question :"
-    document <= html.H1(first_sentence, id='first_sentence')
     document <= html.H2(questions[INDEX_QUESTION]['Question'], id='printed_question')
-    ALL_ID.append('first_sentence')
     ALL_ID.append('printed_question')
-    for i in range(1, 4):            
-        document <= html.BUTTON(questions[INDEX_QUESTION][f'Answer {i}'], id=f'button_{i}')
-        space(2)
-        ALL_ID.append(f'button_{i}')
 
-def update_all(index_question: int, questions: int):
+    response_buttons = [f"button_{i}" for i in range(1, 4)]
+    for i in range(3):            
+        document <= html.BUTTON(questions[INDEX_QUESTION][f'Answer {i + 1}'], id=response_buttons[i])
+        space(2)
+        ALL_ID.append(response_buttons[i])
+
+    bind_buttons(response_buttons, function=function_called, event='click')
+
+def tuple_values(values : str):
+    '''
+    Transforme un str en tuple (pour l'import des questions)
+    Entrées :
+        - values, str de la forme "0, -1, +2, +1"
+    Sorties :
+        - tuple de la forme (0, -1, 2, 1)
+    '''
+    # Préconditions:
+    assert type(values) == str, "L'entrée de la fonction doit être un str."
+    list_values = []
+    for number in values.split(', '):
+        list_values.append(int(number))
+    return tuple(list_values)
+
+# Importation des questions :
+QUESTIONS_TAB = csv_dict_import("Questions.csv")
+for i in range(len(QUESTIONS_TAB)):
+    for key in QUESTIONS_TAB[i]:
+        if key in {"Value 1", "Value 2", "Value 3"}:
+            QUESTIONS_TAB[i][key] = tuple_values(QUESTIONS_TAB[i][key])
+# (On est obligé de mettre cette table en variable globale pour l'utiliser dans la fonction button_clicked)
+
+def update_all(index_question: int, questions: int, characters_data_base: int, k=K):
     '''
     Met à jour l'affichage de la question et des boutons
     
@@ -123,16 +173,14 @@ def update_all(index_question: int, questions: int):
     Pas de sorties, procédure d'affichage.
     '''
     if index_question < len(questions):
-        if index_question == 1:
-            del document['first_sentence']
-            del ALL_ID[ALL_ID.index('first_sentence')]
-        document['printed_question'].textContent = questions[index_question]['Question']
+        document['printed_question'].textContent = questions[index_question]['Question']        
         for nb in range(1, 4):
             document[f'button_{nb}'].textContent = questions[index_question][f'Answer {nb}']
-    else:
-        final_print(CLIENT_PROFILE)
 
-def button_clicked(ev):
+    else:
+        final_print(CLIENT_PROFILE, characters_data_base, k_client=k)
+        
+def response_button_clicked(ev):
     '''
     Changement de l'affichage et modification du profil lorsqu'on clique sur un bouton.
     On récupère l'id du bouton qui est cliqué avec l'objet pris en paramêtre ev.
@@ -145,57 +193,49 @@ def button_clicked(ev):
     global INDEX_QUESTION
 
     # Modification du profil client :
+
     nb_button_clicked = ev.target.id[-1:]
-    added_values = questions_tab[INDEX_QUESTION][f'Value {nb_button_clicked}']
+    added_values = QUESTIONS_TAB[INDEX_QUESTION][f'Value {nb_button_clicked}']
 
-    # Pour les tests : document <= str(added_values)
-
-    i = 0
-    for caracteristic in CLIENT_PROFILE:
+    for i, caracteristic in enumerate(CLIENT_PROFILE):
         if CLIENT_PROFILE[caracteristic] + added_values[i] > 0 and CLIENT_PROFILE[caracteristic] + added_values[i] < 9:
             CLIENT_PROFILE[caracteristic] += added_values[i]
-        i += 1
 
     # Changement de l'affichage :
     INDEX_QUESTION += 1
-    update_all(INDEX_QUESTION, questions_tab)
+    update_all(INDEX_QUESTION, questions=QUESTIONS_TAB, characters_data_base=poudlard_characters, k=K)
 
-def bind_buttons(buttons: list, function=button_clicked, event='click'):
+def launch_quizz(ev):
     '''
-    .bind des 3 boutons réponses, en une fonction.
+    Supprimme tout le contenu de la page
+    puis lance le questionnaire.
 
-    Entrées : 
-        - event : chaîne de caractères, 
-        évènement qui appelle la fonction function (prise en paramètre)
-        - function : fonction appellée lors de l'évènement event (pris en paramètre)
+    Entrées :
+        - ev, paramètre par défaut et obligatoire pour les .bind()
+    Sorties :
+        - Pas de sortie, procédure d'affichage.
     '''
-    # Préconditions:
-    assert type(event) == str, \
-        "L'évènement doit être une chaîne de caractères (ex : 'click')"
+    delete_all()
 
-    for nb in range(1, 4):
-        document[f'button_{nb}'].bind(event, function)
+    create_questions(questions=QUESTIONS_TAB, function_called=response_button_clicked)
 
-# Importation des questions :
-questions_tab = csv_dict_import("Questions.csv")
-for i in range(len(questions_tab)):
-    for key in questions_tab[i]:
-        if key in {"Value 1", "Value 2", "Value 3"}:
-            questions_tab[i][key] = tuple_values(questions_tab[i][key])
+def page_beginning():
+    '''
+    Premier affichage de la page, 
+    création d'un bouton qui appelle la fonction launch_quizz().
 
-# Création des éléments HTML et .bind des boutons :
-create_all(questions=questions_tab)
+    Pas d'entrée ni sortie, procédure d'affichage.
+    '''
+    first_sentence = "Salut, jeune bipède, aurais-tu quelques minutes à m'accorder ? \n\
+                        Je suis le choixpeau magique, répond à mes questions et tu connaitras ta maison."
 
-response_buttons = [f"button_{i}" for i in range(1, 4)]
-bind_buttons(response_buttons, function=button_clicked, event='click')
+    document <= html.H1(first_sentence, id='first_sentence')
+    document <= html.BUTTON("C'est parti !", id='first_button')
 
+    ALL_ID.append('first_sentence')
+    ALL_ID.append('first_button')
 
-'''
-# Pour nos tests :
-space(2)
-document <= html.H4("Testez la questions / réponse à afficher :", id="test_questions")
-for question in questions_tab:
-    for key in question:
-        document <= html.P(str(question[key]))
-    space(2)
-'''
+    document['first_button'].bind("click", launch_quizz)
+
+# Affichage de la page :
+page_beginning()
