@@ -222,10 +222,10 @@ def knn_str(profile : dict, neighbors : list, house : str) -> None:
 
 
 # Importation de la table "Characters.csv" :
-characters_tab = csv_dict_import("Characters.csv")
+characters_tab = csv_dict_import("fichiers_complementaires/Characters.csv")
 
 # Importation de la table "Caracteristiques_des_persos.csv" :
-characteristics_tab = csv_dict_import("Caracteristiques_des_persos.csv")
+characteristics_tab = csv_dict_import("fichiers_complementaires/Caracteristiques_des_persos.csv")
     
     
 # Jointure de ces deux tables dans la table poudlard_characters :
