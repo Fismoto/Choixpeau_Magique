@@ -56,6 +56,10 @@ def ad_elt(text: str, id_elt: str, html_tag=html.P) -> None:
         - id_elt, id de l'élément ajouté
         - tag_type, balise html 
     '''
+    # Préconditions :
+    assert type(text) == str and type(id_elt) == str, \
+        "Le texte à afficher et l'id de lélément html doivent être des str."
+
     document <= html_tag(text, id=id_elt)
     ALL_ID.append(id_elt)
 
@@ -94,6 +98,7 @@ def final_print(profile: dict, characters_data_base: list, k_client=K) -> None:
     house_print = knn_str(profile, k_n_neighbors, house)
     ad_elt(text=house_print, id_elt='test', html_tag=html.P)
 
+
 def space(nb_lines: int) -> None:
     '''
     Saute autant de lignes qu'indiqué en paramètre.
@@ -120,9 +125,12 @@ def bind_buttons(buttons: list, function, event='click') -> None:
     .bind() des 3 boutons réponses, en une fonction.
 
     Entrées : 
-        - event : chaîne de caractères, 
-        évènement qui appelle la fonction function (prise en paramètre)
+        - buttons : liste ou tuple, contient les id des boutons à .bind()
         - function : fonction appellée lors de l'évènement event (pris en paramètre)
+        - event : chaîne de caractères, 
+            évènement qui appelle la fonction function (prise en paramètre)
+
+    Pas de sortie, procédure Web
     '''
     # Préconditions:
     assert type(buttons) == list or type(buttons) == tuple, \
@@ -145,7 +153,9 @@ def create_quizz(questions: list, function_called) -> None:
                             'Answer 1': 'réponse', 'Value 1': 'tuple_de_valeurs', \
                             'Answer 2': 'réponse', 'Value 2': 'tuple_de_valeurs', \
                             'Answer 2': 'réponse', 'Value 2': 'tuple_de_valeurs'}
-    
+
+        - function_called : fonction appellée au clic des boutons
+
     Pas de sortie, procédure d'affichage.
     '''
     question = "Question 1 : " + questions[INDEX_QUESTION]['Question']
@@ -171,6 +181,7 @@ def tuple_values(values : str) -> tuple:
     '''
     # Préconditions:
     assert type(values) == str, "L'entrée de la fonction doit être un str."
+    
     list_values = []
     for number in values.split(', '):
         list_values.append(int(number))
