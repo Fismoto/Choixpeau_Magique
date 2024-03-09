@@ -200,16 +200,7 @@ def knn_str(profile : dict, neighbors : list, house : str) -> None:
      
     assert type(neighbors) == list, \
         "La base de donnée être une liste de dictionnaires."
-    '''
-    for neighbor in neighbors:        
-        assert type(neighbor) == dict, \
-            "La base de donnée doit être une liste de dictionnaires."               
-        for caracteristic in caracteristics:
-            assert caracteristic in neighbor, \
-                "Chaque personnage/dictionnaire doit contenir comme clefs \
-                    toutes les caractéristiques avec lesquelles \
-                        on veut calculer la distance."
-    '''
+
     assessment = f"\nLe personnage ayant les caractéristiques : {profile} a pour plus proches voisins : \n"
 
     for i in range(len(neighbors)):
