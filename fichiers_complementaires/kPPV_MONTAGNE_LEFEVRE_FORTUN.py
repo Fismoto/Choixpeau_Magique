@@ -153,6 +153,7 @@ def knn_house(characters_data_base: list, new_character: dict, caracteristics: t
     
     # Pour ne pas modifier de variable globale :
     data_base_changed = characters_data_base.copy()
+    # on équilibre les maisons entre elles
     for i in range(len(data_base_changed)):
         data_base_changed[i]['Distance'] = euclidian_distance(new_character, \
                         data_base_changed[i], caracteristics=CARACTERISTICS)
