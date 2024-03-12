@@ -45,59 +45,26 @@ def delete_all() -> None:
     ALL_ID.clear()
 
 
-def ad_elt(text: str, id_elt: str, html_tag=html.P) -> None:
+def ad_elt(content: str, id_elt: str, html_tag=html.P) -> None:
     '''
     Ajoute un élément HTML à la page Web et le référence dans la liste ALL_ID.
     Utile car dans le reste du programme, dès qu'on créera un élément html avec ad_elt()\
     son id sera automatiquement enregistré dans la liste ALL_ID.
 
     Entrées :
-        - text, texte à afficher dans l'élément html
+        - content, contenu de l'élément html à afficher dans le document
         - id_elt, id de l'élément ajouté
         - tag_type, balise html 
     '''
     # Préconditions :
-    assert type(text) == str and type(id_elt) == str, \
-        "Le texte à afficher et l'id de lélément html doivent être des str."
+    assert type(content) == str or type(content) == list , \
+       "Le contenu à afficher doit être une chaîne de caractères ou une liste."
 
-    document <= html_tag(text, id=id_elt)
+    assert type(id_elt) == str, \
+       "L'id de l'élément html ajouté doit être entré sous forme de str."
+
+    document <= html_tag(content, id=id_elt)
     ALL_ID.append(id_elt)
-
-
-def final_print(profile: dict, characters_data_base: list, k_client=K) -> None:
-    '''
-    Affichage final de la page (quand l'utilisateur clique sur le dernier bouton).
-    Efface le contenu de la page et affiche la maison du personnage, en utilisant les KPPV
-
-    Entrées :
-        - profile : dictionnaire contenant les valeurs des caractéristiques de l'utilisateur
-        - characters_data_base : table, liste de dictionnaires où chaque dictionnaire correspond à un personnage
-        - k_client : entier, valeur par défault : la constante K
-
-    Pas de sortie, procédure d'affichage
-    '''
-    # Préconditions :
-    assert type(profile) == dict, \
-        "Le nouveau personnage doit être sous forme de dictionnaire."
-
-    assert type(characters_data_base) == list, \
-        "La base de donnée des personnages doit être une liste de dictionnaires."
-
-    assert type(k_client) == int and k_client > 0, \
-        "Le k doit être un entier positif." 
-
-    delete_all()
-
-    house, k_n_neighbors = knn_house(characters_data_base, profile, CARACTERISTICS, k=k_client)
-
-    congrat = "Bravo, vous avez répondu à toutes les questions !"
-    your_house_is = "Et votre maison est ..."
-    for elt in (congrat, your_house_is, house):
-        ad_elt(text=elt, id_elt='test', html_tag=html.H3)
-
-    house_print = knn_str(profile, k_n_neighbors, house)
-    ad_elt(text=house_print, id_elt='test', html_tag=html.P)
-
 
 def space(nb_lines: int) -> None:
     '''
@@ -116,8 +83,105 @@ def space(nb_lines: int) -> None:
 
     for i in range(nb_lines):
         NB_SPACE += 1
-        ad_elt(text='pas_de_texte', id_elt=f"space_{NB_SPACE}", html_tag=html.BR)
-        # text ne sera pas affiché car on ajoute une balise <br>
+        ad_elt(content='pas_de_texte', id_elt=f"space_{NB_SPACE}", html_tag=html.BR)
+        # content ne sera pas affiché car on ajoute une balise <br>
+
+
+# Affichage final :
+def final_print(profile: dict, characters_data_base: list, k_client=K) -> None:
+    '''
+    Affichage final de la page (quand l'utilisateur clique sur le dernier bouton).
+    Efface le contenu de la page et affiche la maison du personnage, en utilisant les KPPV
+
+    Entrées :
+        - profile : dictionnaire contenant les valeurs des caractéristiques de l'utilisateur
+        - characters_data_base : table, liste de dictionnaires où chaque dictionnaire correspond à un personnage
+        - k_client : entier, valeur par défault : la constante K
+
+
+    Pas de sortie, procédure d'affichage
+    '''
+    # Préconditions :
+    assert type(profile) == dict, \
+        "Le nouveau personnage doit être sous forme de dictionnaire."
+
+    assert type(characters_data_base) == list, \
+        "La base de donnée des personnages doit être une liste de dictionnaires."
+
+    assert type(k_client) == int and k_client > 0, \
+        "Le k doit être un entier positif." 
+
+    delete_all()    
+
+
+    house, k_n_neighbors = knn_house(characters_data_base, profile, \
+                                    CARACTERISTICS, k=k_client)
+
+    # On crée une liste d'éléments de type <li> qui correspondent aux voisins :
+    html_neighbors = []
+    for neighbor in k_n_neighbors:
+        neighbor_caracteristics = {}
+        for caracteristic in CARACTERISTICS:
+            neighbor_caracteristics[caracteristic] = neighbor[caracteristic]
+
+        ngbr_print = f"{neighbor['Name']}, de la maison {neighbor['House']} "
+        ngbr_print += f"ayant pour caractéristiques {neighbor_caracteristics}"
+
+        html_neighbors.append(html.LI(ngbr_print))
+
+    printed_elts = (("Bravo, vous avez répondu à toutes les questions !", html.H1), \
+                    (f"Vos caractéristiques sont : {profile}", html.H3), \
+                    ("Et votre maison est ...", html.H3), \
+                    (house, html.H1), \
+                    ("Vos k plus proches voisins sont :", html.H3), \
+    # Les voisins seront affichés dans une balise de type <ul></ul> :
+                    (html_neighbors, html.UL))
+
+    i = 1
+    for elt, tag in printed_elts:
+        ad_elt(content=elt, id_elt=f"elt_{i}",html_tag=tag)
+        i += 1
+
+
+def new_k(ev) -> None:
+    '''
+    Fonction appellée quand on clique sur le bouton 'change_k_button' 
+    (voir def end_of_quizz())
+    Appelle la fonction final_print() avec le nouveau k.
+
+    Entrées :
+        - ev, paramètre obligatoire pour le .bind() du bouton
+
+    Pas de sorties, procédure d'affichage.
+    '''
+    global K
+
+    K = int(input("Saisissez un nouveau k sous forme d'entier positif : "))
+    final_print(profile=CLIENT_PROFILE, characters_data_base=CHARACTERS, \
+                k_client=K)
+
+    # Pour que l'utilisateur puisse à nouveau changer k :
+
+    ad_elt(content="Changer la valeur de k", id_elt="change_k_button", \
+            html_tag=html.BUTTON)
+    
+    document["change_k_button"].bind('click', new_k)
+
+
+def end_of_quizz() -> None:
+    '''
+    Fonction appellée quand le dernier bouton est cliqué, 
+    lance l'affichage final final_print()
+    Pas d'entrées ni sorties, procédure d'affichage.
+    '''
+    final_print(profile=CLIENT_PROFILE, characters_data_base=CHARACTERS, \
+                k_client=K)
+
+    ad_elt(content="Changer la valeur de k", id_elt='change_k_button', \
+            html_tag=html.BUTTON)
+    
+    document["change_k_button"].bind('click', new_k)
+
 
 # Définition des fonctions liées aux boutons :
 def bind_buttons(buttons: list, function, event='click') -> None:
@@ -159,7 +223,7 @@ def create_quizz(questions: list, function_called) -> None:
     Pas de sortie, procédure d'affichage.
     '''
     question = "Question 1 : " + questions[INDEX_QUESTION]['Question']
-    ad_elt(text=question, id_elt='printed_question', html_tag=html.H2)
+    ad_elt(content=question, id_elt='printed_question', html_tag=html.H2)
 
     response_buttons = [f"button_{i}" for i in range(1, 4)]
     for i in range(3):
@@ -169,7 +233,7 @@ def create_quizz(questions: list, function_called) -> None:
 
     bind_buttons(response_buttons, function=function_called, event='click')
 
-    ad_elt(text=f"1/{len(questions)}", id_elt='counter', html_tag=html.P)
+    ad_elt(content=f"1/{len(questions)}", id_elt='counter', html_tag=html.P)
 
 def tuple_values(values : str) -> tuple:
     '''
@@ -231,7 +295,7 @@ def update_quizz(questions: int, characters_data_base: int, k=K) -> None:
         document['counter'].textContent = str(INDEX_QUESTION + 1) + "/" + str(len(questions))
 
     else: # L'utilisateur a déjà répondu à toutes les questions
-        final_print(CLIENT_PROFILE, characters_data_base, k_client=k)
+        end_of_quizz()
 
 
 def response_button_clicked(ev) -> None:
@@ -284,9 +348,9 @@ def page_beginning() -> None:
         "Je suis le choixpeau magique, répond à mes questions et tu connaitras ta maison !")    
 
     for i in range(len(first_sentences)):
-        ad_elt(text=first_sentences[i], id_elt=f'sentence_{i + 1}', html_tag=html.H1)
+        ad_elt(content=first_sentences[i], id_elt=f'sentence_{i + 1}', html_tag=html.H1)
 
-    ad_elt(text="C'est parti !", id_elt='first_button', html_tag=html.BUTTON)
+    ad_elt(content="C'est parti !", id_elt='first_button', html_tag=html.BUTTON)
     document['first_button'].bind("click", launch_quizz)
 
 
