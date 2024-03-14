@@ -1,6 +1,8 @@
+
       body {
         font-family: 'Noto Sans TC', sans-serif;
         text-align: center;
+        background-image : "fichiers_complementaires/Images/Houses.jpg";
       }
       h1 { 
         color: #1BB2E0;
