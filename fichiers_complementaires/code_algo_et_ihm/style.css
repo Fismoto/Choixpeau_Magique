@@ -2,10 +2,10 @@
       body {
         font-family: 'Noto Sans TC', sans-serif;
         text-align: center;
-        background-image : "fichiers_complementaires/Images/Houses.jpg";
+        background : #f0ffdd;
       }
       h1 { 
-        color: #1BB2E0;
+        color: #000000;
         text-align: center;
       }
       img {
@@ -19,4 +19,10 @@
       li{
         text-align: left;
         margin-left: 15%;        
+      }
+      button{
+        height: 50px;
+        width: 500px;
+        background : #ffffff;
+        cursor: pointer;
       }
