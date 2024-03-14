@@ -14,8 +14,7 @@ github : https://github.com/Fismoto/Choixpeau_Magique
 # Importation des modules :
 from math import sqrt
 from browser import document, html
-from ../Algo_kPPV/kPPV_MONTAGNE_LEFEVRE_FORTUN import CARACTERISTICS, \
-    csv_dict_import, euclidian_distance, knn_house, poudlard_characters
+from kPPV_MONTAGNE_LEFEVRE_FORTUN import CARACTERISTICS, csv_dict_import, euclidian_distance, knn_house, poudlard_characters
 
 # Variables globales :
 CLIENT_PROFILE = {}
@@ -256,7 +255,7 @@ def tuple_values(values : str) -> tuple:
 
 
 # Importation des questions :
-QUESTIONS_TAB = csv_dict_import("fichiers_complementaires/Questions.csv")
+QUESTIONS_TAB = csv_dict_import("fichiers_complementaires/Tables/Questions.csv")
 for i in range(len(QUESTIONS_TAB)):
     for key in {"Value 1", "Value 2", "Value 3"}:
         QUESTIONS_TAB[i][key] = tuple_values(QUESTIONS_TAB[i][key])
