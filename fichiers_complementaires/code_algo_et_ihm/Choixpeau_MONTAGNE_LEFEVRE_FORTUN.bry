@@ -42,6 +42,7 @@ def delete_all() -> None:
         del document[id]
 
     ALL_ID.clear()
+    NB_SPACE = 0
 
 
 def ad_elt(content: str, id_elt: str, html_tag=html.P) -> None:
@@ -107,8 +108,10 @@ def final_print(profile: dict, characters_data_base: list, k_client=K) -> None:
     assert type(characters_data_base) == list, \
         "La base de donnée des personnages doit être une liste de dictionnaires."
 
-    assert type(k_client) == int and k_client > 0, \
-        "Le k doit être un entier positif." 
+    assert type(k_client) == int and k_client > 0 \
+       and k_client <= len(characters_data_base), \
+        "Le k doit être un entier positif \
+        et inférieur ou égal au nombre de personnages." 
 
     delete_all()    
 
@@ -132,7 +135,7 @@ def final_print(profile: dict, characters_data_base: list, k_client=K) -> None:
                     (f"Vos caractéristiques sont : {profile}", html.H3), \
                     ("Et votre maison est ...", html.H3), \
                     (house, html.H1), \
-                    ("image_maison", html.P), \
+                    ("image_maison", html.DIV), \
                     ("Vos k plus proches voisins sont :", html.H3), \
     # Les voisins seront affichés dans une balise de type <ul></ul> :
                     (html_neighbors, html.UL))
@@ -144,6 +147,13 @@ def final_print(profile: dict, characters_data_base: list, k_client=K) -> None:
     
     document["elt_5"].clear()
     document["elt_5"] <= html.IMG(src=f"fichiers_complementaires/Images/{house}.jpg", height=250)
+
+    '''
+    On affiche le bouton rafraîchir (créé et caché dans le html 
+    car nous n'avons pas réussi à rafraîchir la page en brython)
+    '''
+    document["refresh_button"].style.display = "inline"
+    
 
 def new_k(ev) -> None:
     '''
@@ -166,7 +176,7 @@ def new_k(ev) -> None:
 
     ad_elt(content="Changer la valeur de k", id_elt="change_k_button", \
             html_tag=html.BUTTON)
-    
+
     document["change_k_button"].bind('click', new_k)
 
 
@@ -181,8 +191,8 @@ def end_of_quizz() -> None:
 
     ad_elt(content="Changer la valeur de k", id_elt='change_k_button', \
             html_tag=html.BUTTON)
-    
-    document["change_k_button"].bind('click', new_k)
+
+    document['change_k_button'].bind('click', new_k)
 
 
 # Définition des fonctions liées aux boutons :
@@ -236,6 +246,7 @@ def create_quizz(questions: list, function_called) -> None:
     bind_buttons(response_buttons, function=function_called, event='click')
 
     ad_elt(content=f"1/{len(questions)}", id_elt='counter', html_tag=html.P)
+
 
 def tuple_values(values : str) -> tuple:
     '''
@@ -353,6 +364,11 @@ def page_beginning() -> None:
 
     ad_elt(content="C'est parti !", id_elt='first_button', html_tag=html.BUTTON)
     document['first_button'].bind("click", launch_quizz)
+
+    space(2)
+
+    document <= html.IMG(id="houses_img", src="fichiers_complementaires/Images/Houses.jpg", height=400)
+    ALL_ID.append("houses_img")
 
 
 # Affichage de la page :
