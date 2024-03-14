@@ -14,8 +14,8 @@ github : https://github.com/Fismoto/Choixpeau_Magique
 # Importation des modules :
 from math import sqrt
 from browser import document, html
-from kPPV_MONTAGNE_LEFEVRE_FORTUN import CARACTERISTICS, csv_dict_import, \
-    euclidian_distance, knn_house, knn_str, poudlard_characters
+from fichiers_complementaires/Algo_kPPV/kPPV_MONTAGNE_LEFEVRE_FORTUN import CARACTERISTICS, \
+    csv_dict_import, euclidian_distance, knn_house, poudlard_characters
 
 # Variables globales :
 CLIENT_PROFILE = {}
@@ -133,6 +133,7 @@ def final_print(profile: dict, characters_data_base: list, k_client=K) -> None:
                     (f"Vos caractéristiques sont : {profile}", html.H3), \
                     ("Et votre maison est ...", html.H3), \
                     (house, html.H1), \
+                    ("image_maison", html.P), \
                     ("Vos k plus proches voisins sont :", html.H3), \
     # Les voisins seront affichés dans une balise de type <ul></ul> :
                     (html_neighbors, html.UL))
@@ -141,7 +142,9 @@ def final_print(profile: dict, characters_data_base: list, k_client=K) -> None:
     for elt, tag in printed_elts:
         ad_elt(content=elt, id_elt=f"elt_{i}",html_tag=tag)
         i += 1
-
+    
+    document["elt_5"].clear()
+    document["elt_5"] <= html.IMG(src=f"fichiers_complementaires/{house}.jpg", height=250)
 
 def new_k(ev) -> None:
     '''
@@ -255,9 +258,8 @@ def tuple_values(values : str) -> tuple:
 # Importation des questions :
 QUESTIONS_TAB = csv_dict_import("fichiers_complementaires/Questions.csv")
 for i in range(len(QUESTIONS_TAB)):
-    for key in QUESTIONS_TAB[i]:
-        if key in {"Value 1", "Value 2", "Value 3"}:
-            QUESTIONS_TAB[i][key] = tuple_values(QUESTIONS_TAB[i][key])
+    for key in {"Value 1", "Value 2", "Value 3"}:
+        QUESTIONS_TAB[i][key] = tuple_values(QUESTIONS_TAB[i][key])
 # (On est obligé de mettre cette table en variable globale pour l'utiliser dans la fonction button_clicked)
 
 
