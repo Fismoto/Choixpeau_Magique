@@ -14,7 +14,7 @@ github : https://github.com/Fismoto/Choixpeau_Magique
 # Importation des modules :
 from math import sqrt
 from browser import document, html
-from fichiers_complementaires/Algo_kPPV/kPPV_MONTAGNE_LEFEVRE_FORTUN import CARACTERISTICS, \
+from ../Algo_kPPV/kPPV_MONTAGNE_LEFEVRE_FORTUN import CARACTERISTICS, \
     csv_dict_import, euclidian_distance, knn_house, poudlard_characters
 
 # Variables globales :
